@@ -3,14 +3,8 @@ using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 import Toybox.Lang;
 
-class ultimatecyclingView extends Ui.DataField {
+class ultimatecyclingfieldView extends Ui.DataField {
   // Calculated values that change on every call to compute()
-  var elapsedDistance;
-  var elapsedTime;
-  var currentCadence;
-  var currentHeartRate;
-  var currentSpeed = 100;
-  var battery;
 
   function initialize() {
     DataField.initialize();
@@ -18,19 +12,11 @@ class ultimatecyclingView extends Ui.DataField {
 
   // Display the value you computed here. This will be called
   // once a second when the data field is visible.
-  function compute(info) {
-    var myStats = System.getSystemStats();
-    elapsedDistance =
-      (info.elapsedDistance != null ? info.elapsedDistance : 0) / 1000.0f;
-    elapsedTime = info.elapsedTime != null ? info.elapsedTime : 0;
-    currentCadence = info.currentCadence != null ? info.currentCadence : 0;
-    currentHeartRate =
-      info.currentHeartRate != null ? info.currentHeartRate : 0;
-    currentSpeed = info.currentSpeed != null ? info.currentSpeed : 0;
-  }
+  function compute(info) {}
 
   function onUpdate(dc) {
     var darkGreen = Gfx.COLOR_DK_GREEN;
+    var lightGreen = Gfx.COLOR_GREEN;
 
     var labelFont = Gfx.FONT_SYSTEM_XTINY;
     var labelColor = Gfx.COLOR_LT_GRAY;
@@ -39,10 +25,10 @@ class ultimatecyclingView extends Ui.DataField {
     var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
 
-    var elePosX = halfWidth - 40;
-    var elePosY = 8;
-    var grdPosX = halfWidth + 40;
-    var grdPosY = 8;
+    var elePosX = halfWidth - 32;
+    var elePosY = 10;
+    var grdPosX = halfWidth + 32;
+    var grdPosY = 10;
 
     var backgroundColour = Gfx.COLOR_WHITE;
 
@@ -83,9 +69,9 @@ class ultimatecyclingView extends Ui.DataField {
     // Draw labels
     dc.setColor(labelColor, Gfx.COLOR_TRANSPARENT);
 
-    // dc.drawText(elePosX, elePosY, labelFont, "DIS", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(elePosX, elePosY, labelFont, "CLK", Gfx.TEXT_JUSTIFY_CENTER);
 
-    // dc.drawText(grdPosX, grdPosY, labelFont, "ELA", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(grdPosX, grdPosY, labelFont, "DIS", Gfx.TEXT_JUSTIFY_CENTER);
 
     dc.drawText(
       halfWidth - 28,
@@ -110,7 +96,7 @@ class ultimatecyclingView extends Ui.DataField {
       elePosX,
       elePosY + 20,
       Gfx.FONT_XTINY,
-      formatDistance(elapsedDistance) + " km",
+      "6:28pm",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -119,7 +105,7 @@ class ultimatecyclingView extends Ui.DataField {
       grdPosX,
       grdPosY + 20,
       Gfx.FONT_XTINY,
-      formatElapsedTime(elapsedTime),
+      "11 km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -152,7 +138,7 @@ class ultimatecyclingView extends Ui.DataField {
       halfWidth,
       dc.getHeight() / 2 - 44,
       Gfx.FONT_NUMBER_HOT,
-      currentSpeed,
+      "25",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -176,7 +162,7 @@ class ultimatecyclingView extends Ui.DataField {
       0 + 32,
       dc.getHeight() / 2 - 14,
       Gfx.FONT_MEDIUM,
-      currentCadence,
+      "87",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -184,7 +170,7 @@ class ultimatecyclingView extends Ui.DataField {
       dc.getWidth() - 12,
       dc.getHeight() / 2 - 14,
       Gfx.FONT_MEDIUM,
-      currentHeartRate,
+      "120",
       Gfx.TEXT_JUSTIFY_RIGHT
     );
 
@@ -202,34 +188,8 @@ class ultimatecyclingView extends Ui.DataField {
       halfWidth + 32,
       dc.getHeight() - 36,
       Gfx.FONT_XTINY,
-      "1.25" + "%",
+      "92.6%",
       Gfx.TEXT_JUSTIFY_CENTER
     );
-  }
-
-  function formatDistance(distance) {
-    if (distance != null && distance > 0) {
-      if (distance >= 1000) {
-        return distance.format("%d");
-      } else if (distance >= 100) {
-        return distance.format("%.1f");
-      } else {
-        return distance.format("%.2f");
-      }
-    } else {
-      return "0.00";
-    }
-  }
-
-  function formatElapsedTime(msValue) {
-    var hours = msValue / 1000 / 60 / 60;
-    var mins = (msValue / 1000 / 60) % 60;
-    var secs = (msValue / 1000) % 60;
-    var timeStr = Lang.format("$1:$2$:$3$", [
-      hours.format("%01d"),
-      mins.format("%02d"),
-      secs.format("%02d"),
-    ]);
-    return timeStr;
   }
 }
