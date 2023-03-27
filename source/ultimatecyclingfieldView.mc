@@ -8,6 +8,14 @@ class ultimatecyclingfieldView extends Ui.DataField {
   var currentSpeed;
   var averageSpeed;
   var maxSpeed;
+
+  var currentCadence;
+  var averageCadence;
+
+  var currentHeartRate;
+  var averageHeartRate;
+  var maxHeartRate;
+
   var clockTime;
 
   function initialize() {
@@ -18,6 +26,15 @@ class ultimatecyclingfieldView extends Ui.DataField {
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
     averageSpeed = (info.averageSpeed != null ? info.averageSpeed : 0) * 3.6;
     maxSpeed = (info.maxSpeed != null ? info.maxSpeed : 0) * 3.6;
+
+    currentCadence = info.currentCadence != null ? info.currentCadence : 0.0;
+    averageCadence = info.averageCadence != null ? info.averageCadence : 0.0;
+
+    currentHeartRate =
+      info.currentHeartRate != null ? info.currentHeartRate : 0.0;
+    averageHeartRate =
+      info.averageHeartRate != null ? info.averageHeartRate : 0.0;
+    maxHeartRate = info.maxHeartRate != null ? info.maxHeartRate : 0.0;
   }
 
   function onUpdate(dc) {
@@ -79,7 +96,6 @@ class ultimatecyclingfieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-
     dc.setColor(speedColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 4,
@@ -113,7 +129,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 24,
       Gfx.FONT_TINY,
-      "130",
+      "150",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -121,7 +137,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 48,
       Gfx.FONT_NUMBER_MILD,
-      "87",
+      currentCadence.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -129,7 +145,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 92,
       Gfx.FONT_TINY,
-      "80",
+      averageCadence.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -139,7 +155,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       HR_POSX,
       VERT_OFFSET_ELE + 24,
       Gfx.FONT_TINY,
-      "150",
+      maxHeartRate.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -147,7 +163,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       HR_POSX,
       VERT_OFFSET_ELE + 48,
       Gfx.FONT_NUMBER_MILD,
-      "120",
+      currentHeartRate.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -155,7 +171,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       HR_POSX,
       VERT_OFFSET_ELE + 92,
       Gfx.FONT_TINY,
-      "130",
+      averageHeartRate.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
