@@ -1,21 +1,15 @@
 import Toybox.Activity;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
-using Toybox.Application as App;
 import Toybox.Lang;
 
 class ultimatecyclingView extends Ui.DataField {
-  var kmOrMileInMetersDistance;
-
-  // Settings
-  var is24Hour;
-
   // Calculated values that change on every call to compute()
   var elapsedDistance;
   var elapsedTime;
   var currentCadence;
   var currentHeartRate;
-  var currentSpeed;
+  var currentSpeed = 100;
   var battery;
 
   function initialize() {
@@ -30,11 +24,10 @@ class ultimatecyclingView extends Ui.DataField {
       (info.elapsedDistance != null ? info.elapsedDistance : 0) / 1000.0f;
     elapsedTime = info.elapsedTime != null ? info.elapsedTime : 0;
     currentCadence = info.currentCadence != null ? info.currentCadence : 0;
-    currentHeartRate = info.currentHeartRate != null ? info.currentHeartRate : 0;
+    currentHeartRate =
+      info.currentHeartRate != null ? info.currentHeartRate : 0;
     currentSpeed = info.currentSpeed != null ? info.currentSpeed : 0;
-    battery  =  myStats.battery;
   }
-
 
   function onUpdate(dc) {
     var darkGreen = Gfx.COLOR_DK_GREEN;
@@ -209,7 +202,7 @@ class ultimatecyclingView extends Ui.DataField {
       halfWidth + 32,
       dc.getHeight() - 36,
       Gfx.FONT_XTINY,
-      battery,
+      "1.25" + "%",
       Gfx.TEXT_JUSTIFY_CENTER
     );
   }

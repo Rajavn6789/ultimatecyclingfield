@@ -3,26 +3,21 @@ import Toybox.Lang;
 import Toybox.WatchUi;
 
 class ultimatecyclingApp extends Application.AppBase {
+  var mainView;
 
-    function initialize() {
-        AppBase.initialize();
-    }
+  function initialize() {
+    AppBase.initialize();
+  }
 
-    // onStart() is called on application start up
-    function onStart(state as Dictionary?) as Void {
-    }
+  // onStart() is called on application start up
+  function onStart(state as Dictionary?) as Void {}
 
-    // onStop() is called when your application is exiting
-    function onStop(state as Dictionary?) as Void {
-    }
+  // onStop() is called when your application is exiting
+  function onStop(state as Dictionary?) as Void {}
 
-    //! Return the initial view of your application here
-    function getInitialView() as Array<Views or InputDelegates>? {
-        return [ new ultimatecyclingView() ] as Array<Views or InputDelegates>;
-    }
-
-}
-
-function getApp() as ultimatecyclingApp {
-    return Application.getApp() as ultimatecyclingApp;
+  //! Return the initial view of your application here
+  function getInitialView() {
+    mainView = new ultimatecyclingView();
+    return [mainView];
+  }
 }
