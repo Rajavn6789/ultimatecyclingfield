@@ -10,32 +10,20 @@ class ultimatecyclingfieldView extends Ui.DataField {
     DataField.initialize();
   }
 
-  // Display the value you computed here. This will be called
-  // once a second when the data field is visible.
-  function compute(info) {}
-
   function onUpdate(dc) {
     var darkGreen = Gfx.COLOR_DK_GREEN;
-    var lightGreen = Gfx.COLOR_GREEN;
-
-    var labelFont = Gfx.FONT_SYSTEM_XTINY;
-    var labelColor = Gfx.COLOR_LT_GRAY;
-
     var halfWidth = dc.getWidth() / 2;
-    var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
+    var VERT_OFFSET_ELE = dc.getHeight() * 0.2;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
-
-    var elePosX = halfWidth - 32;
-    var elePosY = 10;
-    var grdPosX = halfWidth + 32;
-    var grdPosY = 10;
+    var CAD_HR_VALUE_HORI_OFFSET = 36;
+    var DIS_TIME_VER_OFFSET = 16;
 
     var backgroundColour = Gfx.COLOR_WHITE;
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
 
-    // Draw horizontal Lines
+    // Draw  Lines
     dc.setColor(darkGreen, Gfx.COLOR_TRANSPARENT);
     dc.drawLine(0, VERT_OFFSET_ELE, dc.getWidth(), VERT_OFFSET_ELE);
     dc.drawLine(
@@ -45,14 +33,6 @@ class ultimatecyclingfieldView extends Ui.DataField {
       dc.getHeight() - VERT_OFFSET_ELE
     );
 
-    // Draw vertical lines
-    dc.drawLine(halfWidth, 0, halfWidth, VERT_OFFSET_ELE);
-    dc.drawLine(
-      halfWidth,
-      dc.getHeight() - VERT_OFFSET_ELE,
-      halfWidth,
-      dc.getHeight()
-    );
     dc.drawLine(
       HOR_OFFSET_CAD,
       VERT_OFFSET_ELE,
@@ -64,54 +44,22 @@ class ultimatecyclingfieldView extends Ui.DataField {
       VERT_OFFSET_ELE,
       dc.getWidth() - HOR_OFFSET_CAD,
       dc.getHeight() - VERT_OFFSET_ELE
-    );
-
-    // Draw labels
-    dc.setColor(labelColor, Gfx.COLOR_TRANSPARENT);
-
-    dc.drawText(elePosX, elePosY, labelFont, "CLK", Gfx.TEXT_JUSTIFY_CENTER);
-
-    dc.drawText(grdPosX, grdPosY, labelFont, "DIS", Gfx.TEXT_JUSTIFY_CENTER);
-
-    dc.drawText(
-      halfWidth - 28,
-      dc.getHeight() - VERT_OFFSET_ELE + 4,
-      labelFont,
-      "GPS",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      halfWidth + 28,
-      dc.getHeight() - VERT_OFFSET_ELE + 4,
-      labelFont,
-      "BAT",
-      Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
-    // GPS section
+    // Distance section
     dc.drawText(
-      elePosX,
-      elePosY + 20,
-      Gfx.FONT_XTINY,
-      "6:28pm",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    // Battery section
-    dc.drawText(
-      grdPosX,
-      grdPosY + 20,
-      Gfx.FONT_XTINY,
-      "11 km",
+      halfWidth,
+      DIS_TIME_VER_OFFSET,
+      Gfx.FONT_TINY,
+      "11.45 km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     // Speed section
     dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 10,
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
       dc.getHeight() / 2 - 24,
       Gfx.FONT_XTINY,
       "k",
@@ -119,7 +67,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
     );
 
     dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 10,
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
       dc.getHeight() / 2 - 12,
       Gfx.FONT_XTINY,
       "p",
@@ -127,7 +75,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
     );
 
     dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 10,
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
       dc.getHeight() / 2 + 4,
       Gfx.FONT_XTINY,
       "h",
@@ -135,7 +83,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
     );
 
     dc.drawText(
-      halfWidth,
+      halfWidth - 4,
       dc.getHeight() / 2 - 44,
       Gfx.FONT_NUMBER_HOT,
       "25",
@@ -144,51 +92,78 @@ class ultimatecyclingfieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      VERT_OFFSET_ELE + 8,
+      VERT_OFFSET_ELE + 16,
       Gfx.FONT_XTINY,
-      "35",
+      "35" + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
       halfWidth,
-      dc.getHeight() / 2 + 32,
+      dc.getHeight() / 2 + 36,
       Gfx.FONT_XTINY,
-      "20",
+      "20" + " kph",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    // Cadence
+
+    dc.drawText(
+      0 + CAD_HR_VALUE_HORI_OFFSET,
+      dc.getHeight() / 2 - 36,
+      Gfx.FONT_XTINY,
+      "130",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
-      0 + 32,
+      0 + CAD_HR_VALUE_HORI_OFFSET,
+      dc.getHeight() / 2 + 24,
+      Gfx.FONT_XTINY,
+      "80",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    dc.drawText(
+      0 + CAD_HR_VALUE_HORI_OFFSET,
       dc.getHeight() / 2 - 14,
-      Gfx.FONT_MEDIUM,
+      Gfx.FONT_LARGE,
       "87",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-    dc.drawText(
-      dc.getWidth() - 12,
-      dc.getHeight() / 2 - 14,
-      Gfx.FONT_MEDIUM,
-      "120",
-      Gfx.TEXT_JUSTIFY_RIGHT
-    );
+    // Heart Rate
 
-    // GPS section
-    dc.drawText(
-      halfWidth - 28,
-      dc.getHeight() - 36,
+        dc.drawText(
+      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
+      dc.getHeight() / 2 - 36,
       Gfx.FONT_XTINY,
-      "good",
+      "150",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-    // Battery section
-    dc.drawText(
-      halfWidth + 32,
-      dc.getHeight() - 36,
+        dc.drawText(
+      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
+      dc.getHeight() / 2 + 24,
       Gfx.FONT_XTINY,
-      "92.6%",
+      "120",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    dc.drawText(
+      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
+      dc.getHeight() / 2 - 14,
+      Gfx.FONT_MEDIUM,
+      "130",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    // Time section
+    dc.drawText(
+      halfWidth,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
+      Gfx.FONT_TINY,
+      "10:20" + " pm",
       Gfx.TEXT_JUSTIFY_CENTER
     );
   }
