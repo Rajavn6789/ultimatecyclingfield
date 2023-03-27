@@ -4,10 +4,15 @@ using Toybox.WatchUi as Ui;
 import Toybox.Lang;
 
 class ultimatecyclingfieldView extends Ui.DataField {
-  // Calculated values that change on every call to compute()
+  var currentSpeed;
 
   function initialize() {
     DataField.initialize();
+  }
+
+  function compute(info) {
+    currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
+
   }
 
   function onUpdate(dc) {
@@ -19,6 +24,13 @@ class ultimatecyclingfieldView extends Ui.DataField {
     var DIS_TIME_VER_OFFSET = 16;
 
     var backgroundColour = Gfx.COLOR_WHITE;
+
+    var speedColor;
+    if (currentSpeed > 5 ) {
+      speedColor = darkGreen;
+    } else {
+      speedColor = Gfx.COLOR_BLACK;
+    }
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
@@ -58,43 +70,46 @@ class ultimatecyclingfieldView extends Ui.DataField {
     );
 
     // Speed section
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 - 24,
-      Gfx.FONT_XTINY,
-      "k",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
+    // dc.drawText(
+    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
+    //   dc.getHeight() / 2 - 24,
+    //   Gfx.FONT_XTINY,
+    //   "k",
+    //   Gfx.TEXT_JUSTIFY_CENTER
+    // );
 
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 - 12,
-      Gfx.FONT_XTINY,
-      "p",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
+    // dc.drawText(
+    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
+    //   dc.getHeight() / 2 - 12,
+    //   Gfx.FONT_XTINY,
+    //   "p",
+    //   Gfx.TEXT_JUSTIFY_CENTER
+    // );
 
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 + 4,
-      Gfx.FONT_XTINY,
-      "h",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
+    // dc.drawText(
+    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
+    //   dc.getHeight() / 2 + 4,
+    //   Gfx.FONT_XTINY,
+    //   "h",
+    //   Gfx.TEXT_JUSTIFY_CENTER
+    // );
 
+    dc.setColor(speedColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 4,
       dc.getHeight() / 2 - 44,
       Gfx.FONT_NUMBER_HOT,
-      "25",
+      currentSpeed.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
+
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
     dc.drawText(
       halfWidth,
       VERT_OFFSET_ELE + 16,
       Gfx.FONT_XTINY,
-      "35" + " kph",
+      "35.8" + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -102,7 +117,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       halfWidth,
       dc.getHeight() / 2 + 36,
       Gfx.FONT_XTINY,
-      "20" + " kph",
+      "20.4" + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -134,7 +149,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
 
     // Heart Rate
 
-        dc.drawText(
+    dc.drawText(
       dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
       dc.getHeight() / 2 - 36,
       Gfx.FONT_XTINY,
@@ -142,7 +157,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-        dc.drawText(
+    dc.drawText(
       dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
       dc.getHeight() / 2 + 24,
       Gfx.FONT_XTINY,
