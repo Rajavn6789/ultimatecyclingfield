@@ -5,6 +5,9 @@ using Toybox.System as Sys;
 import Toybox.Lang;
 
 class ultimatecyclingfieldView extends Ui.DataField {
+
+   var elapsedDistance;
+
   var currentSpeed;
   var averageSpeed;
   var maxSpeed;
@@ -17,12 +20,16 @@ class ultimatecyclingfieldView extends Ui.DataField {
   var maxHeartRate;
 
   var clockTime;
+ 
 
   function initialize() {
     DataField.initialize();
   }
 
   function compute(info) {
+
+    elapsedDistance = (info.elapsedDistance != null ? info.elapsedDistance : 0) * 1000;
+
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
     averageSpeed = (info.averageSpeed != null ? info.averageSpeed : 0) * 3.6;
     maxSpeed = (info.maxSpeed != null ? info.maxSpeed : 0) * 3.6;
@@ -35,6 +42,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
     averageHeartRate =
       info.averageHeartRate != null ? info.averageHeartRate : 0.0;
     maxHeartRate = info.maxHeartRate != null ? info.maxHeartRate : 0.0;
+    
   }
 
   function onUpdate(dc) {
@@ -92,7 +100,7 @@ class ultimatecyclingfieldView extends Ui.DataField {
       halfWidth,
       DIS_TIME_VER_OFFSET,
       Gfx.FONT_TINY,
-      "11.45 km",
+      formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -188,8 +196,6 @@ class ultimatecyclingfieldView extends Ui.DataField {
   function formatTime(clockTime) {
     var hour = clockTime.hour;
     var ampm = "";
-    var font = Gfx.FONT_NUMBER_HOT;
-
     //handle midnight and noon, which return as 0
     hour = clockTime.hour % 12 == 0 ? 12 : clockTime.hour % 12;
     ampm = clockTime.hour >= 12 && clockTime.hour < 24 ? " pm" : " am";
@@ -200,5 +206,19 @@ class ultimatecyclingfieldView extends Ui.DataField {
       ampm,
     ]);
     return timeString;
+  }
+
+  function formatDistance(distance) {
+    if (distance != null && distance > 0) {
+      if (distance >= 1000) {
+        return distance.format("%d");
+      } else if (distance >= 100) {
+        return distance.format("%.1f");
+      } else {
+        return distance.format("%.2f");
+      }
+    } else {
+      return "0.00";
+    }
   }
 }
