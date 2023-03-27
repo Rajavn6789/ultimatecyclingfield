@@ -2,11 +2,11 @@ import Toybox.Activity;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+// using Toybox.UserProfile as User;
 import Toybox.Lang;
 
 class ultimatecyclingfieldView extends Ui.DataField {
-
-   var elapsedDistance;
+  var elapsedDistance;
 
   var currentSpeed;
   var averageSpeed;
@@ -15,20 +15,22 @@ class ultimatecyclingfieldView extends Ui.DataField {
   var currentCadence;
   var averageCadence;
 
+  
   var currentHeartRate;
   var averageHeartRate;
   var maxHeartRate;
+	// var heartRate;
+	// var heartRateZone;
 
   var clockTime;
- 
 
   function initialize() {
     DataField.initialize();
   }
 
   function compute(info) {
-
-    elapsedDistance = (info.elapsedDistance != null ? info.elapsedDistance : 0) * 1000;
+    elapsedDistance =
+      (info.elapsedDistance != null ? info.elapsedDistance : 0) / 1000;
 
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
     averageSpeed = (info.averageSpeed != null ? info.averageSpeed : 0) * 3.6;
@@ -42,7 +44,23 @@ class ultimatecyclingfieldView extends Ui.DataField {
     averageHeartRate =
       info.averageHeartRate != null ? info.averageHeartRate : 0.0;
     maxHeartRate = info.maxHeartRate != null ? info.maxHeartRate : 0.0;
-    
+
+    // 	// Heart rate zone
+		// heartRateZone = null;
+
+		// 	var heartRateZones = User.getHeartRateZones(User.getCurrentSport());
+		// 	heartRateZone = '-';
+		// 	if (heartRate != null && heartRate > heartRateZones[0]) {
+		// 		for (var x = 1; x < heartRateZones.size(); x++) {
+		// 			if (heartRate <= heartRateZones[x]) {
+		// 				heartRateZone = x;
+		// 				break;
+		// 			}
+		// 			// We're apparently over the maximum for the highest heart rate zone, so just max out.
+		// 			heartRateZone = '+';
+		// 		}
+		// 	}
+		
   }
 
   function onUpdate(dc) {
@@ -61,11 +79,24 @@ class ultimatecyclingfieldView extends Ui.DataField {
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed > 5) {
+    if (currentSpeed >= 20) {
       speedColor = darkGreen;
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
+
+  //  // Choose the colour of the heart rate icon based on heart rate zone
+	// 	var heartRateZoneTextColour = Gfx.COLOR_WHITE;
+	
+  //   if (heartRateZone == 2) {
+	// 		heartRateZoneTextColour = Gfx.COLOR_BLUE;
+	// 	} else if (heartRateZone == 3) {
+	// 		heartRateZoneTextColour = Gfx.COLOR_DK_GREEN;
+	// 	} else if (heartRateZone == 4) {
+	// 		heartRateZoneTextColour = Gfx.COLOR_YELLOW;
+	// 	} else {
+	// 		heartRateZoneTextColour = Gfx.COLOR_RED;
+	// 	}
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
