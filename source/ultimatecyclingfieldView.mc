@@ -1,10 +1,14 @@
 import Toybox.Activity;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
+using Toybox.System as Sys;
 import Toybox.Lang;
 
 class ultimatecyclingfieldView extends Ui.DataField {
   var currentSpeed;
+  var averageSpeed;
+  var maxSpeed;
+  var clockTime;
 
   function initialize() {
     DataField.initialize();
@@ -12,7 +16,8 @@ class ultimatecyclingfieldView extends Ui.DataField {
 
   function compute(info) {
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
-
+    averageSpeed = (info.averageSpeed != null ? info.averageSpeed : 0) * 3.6;
+    maxSpeed = (info.maxSpeed != null ? info.maxSpeed : 0) * 3.6;
   }
 
   function onUpdate(dc) {
@@ -23,10 +28,15 @@ class ultimatecyclingfieldView extends Ui.DataField {
     var CAD_HR_VALUE_HORI_OFFSET = 36;
     var DIS_TIME_VER_OFFSET = 16;
 
+    var HR_POSX = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
+    var CAD_POSX = 0 + CAD_HR_VALUE_HORI_OFFSET;
+
     var backgroundColour = Gfx.COLOR_WHITE;
 
+    clockTime = Sys.getClockTime();
+
     var speedColor;
-    if (currentSpeed > 5 ) {
+    if (currentSpeed > 5) {
       speedColor = darkGreen;
     } else {
       speedColor = Gfx.COLOR_BLACK;
@@ -69,30 +79,6 @@ class ultimatecyclingfieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-    // Speed section
-    // dc.drawText(
-    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
-    //   dc.getHeight() / 2 - 24,
-    //   Gfx.FONT_XTINY,
-    //   "k",
-    //   Gfx.TEXT_JUSTIFY_CENTER
-    // );
-
-    // dc.drawText(
-    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
-    //   dc.getHeight() / 2 - 12,
-    //   Gfx.FONT_XTINY,
-    //   "p",
-    //   Gfx.TEXT_JUSTIFY_CENTER
-    // );
-
-    // dc.drawText(
-    //   dc.getWidth() - HOR_OFFSET_CAD - 12,
-    //   dc.getHeight() / 2 + 4,
-    //   Gfx.FONT_XTINY,
-    //   "h",
-    //   Gfx.TEXT_JUSTIFY_CENTER
-    // );
 
     dc.setColor(speedColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
@@ -107,68 +93,68 @@ class ultimatecyclingfieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      VERT_OFFSET_ELE + 16,
-      Gfx.FONT_XTINY,
-      "35.8" + " kph",
+      VERT_OFFSET_ELE + 12,
+      Gfx.FONT_TINY,
+      maxSpeed.format("%.1f") + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
       halfWidth,
       dc.getHeight() / 2 + 36,
-      Gfx.FONT_XTINY,
-      "20.4" + " kph",
+      Gfx.FONT_TINY,
+      averageSpeed.format("%.1f") + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     // Cadence
 
     dc.drawText(
-      0 + CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 - 36,
-      Gfx.FONT_XTINY,
+      CAD_POSX,
+      VERT_OFFSET_ELE + 24,
+      Gfx.FONT_TINY,
       "130",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
-      0 + CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 + 24,
-      Gfx.FONT_XTINY,
-      "80",
+      CAD_POSX,
+      VERT_OFFSET_ELE + 48,
+      Gfx.FONT_NUMBER_MILD,
+      "87",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
-      0 + CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 - 14,
-      Gfx.FONT_LARGE,
-      "87",
+      CAD_POSX,
+      VERT_OFFSET_ELE + 92,
+      Gfx.FONT_TINY,
+      "80",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     // Heart Rate
 
     dc.drawText(
-      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 - 36,
-      Gfx.FONT_XTINY,
+      HR_POSX,
+      VERT_OFFSET_ELE + 24,
+      Gfx.FONT_TINY,
       "150",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
-      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 + 24,
-      Gfx.FONT_XTINY,
+      HR_POSX,
+      VERT_OFFSET_ELE + 48,
+      Gfx.FONT_NUMBER_MILD,
       "120",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
-      dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET,
-      dc.getHeight() / 2 - 14,
-      Gfx.FONT_MEDIUM,
+      HR_POSX,
+      VERT_OFFSET_ELE + 92,
+      Gfx.FONT_TINY,
       "130",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -178,8 +164,25 @@ class ultimatecyclingfieldView extends Ui.DataField {
       halfWidth,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
       Gfx.FONT_TINY,
-      "10:20" + " pm",
+      formatTime(clockTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
+  }
+
+  function formatTime(clockTime) {
+    var hour = clockTime.hour;
+    var ampm = "";
+    var font = Gfx.FONT_NUMBER_HOT;
+
+    //handle midnight and noon, which return as 0
+    hour = clockTime.hour % 12 == 0 ? 12 : clockTime.hour % 12;
+    ampm = clockTime.hour >= 12 && clockTime.hour < 24 ? " pm" : " am";
+
+    var timeString = Lang.format("$1$:$2$$3$", [
+      hour.format("%02d"),
+      clockTime.min.format("%02d"),
+      ampm,
+    ]);
+    return timeString;
   }
 }
