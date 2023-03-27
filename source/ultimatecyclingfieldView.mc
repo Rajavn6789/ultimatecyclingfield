@@ -5,7 +5,7 @@ using Toybox.System as Sys;
 // using Toybox.UserProfile as User;
 import Toybox.Lang;
 
-class ultimatecyclingfieldView extends Ui.DataField {
+class UltimateCyclingFieldView extends Ui.DataField {
   var elapsedDistance;
 
   var currentSpeed;

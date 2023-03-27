@@ -2,7 +2,7 @@ import Toybox.Application;
 import Toybox.Lang;
 import Toybox.WatchUi;
 
-class ultimatecyclingfieldApp extends Application.AppBase {
+class UltimateCyclingFieldApp extends Application.AppBase {
   function initialize() {
     AppBase.initialize();
   }
@@ -15,10 +15,10 @@ class ultimatecyclingfieldApp extends Application.AppBase {
 
   //! Return the initial view of your application here
   function getInitialView() as Array<Views or InputDelegates>? {
-    return [new ultimatecyclingfieldView()] as Array<Views or InputDelegates>;
+    return [new UltimateCyclingFieldView()] as Array<Views or InputDelegates>;
   }
 }
 
-function getApp() as ultimatecyclingfieldApp {
-  return Application.getApp() as ultimatecyclingfieldApp;
+function getApp() as UltimateCyclingFieldApp {
+  return Application.getApp() as UltimateCyclingFieldApp;
 }
