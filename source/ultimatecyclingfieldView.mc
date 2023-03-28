@@ -1,5 +1,5 @@
 import Toybox.Activity;
-using Toybox.Graphics as Gfx;
+using Toybox.Gfx as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 // using Toybox.UserProfile as User;
@@ -269,4 +269,35 @@ class UltimateCyclingFieldView extends Ui.DataField {
       return "0.00";
     }
   }
+
+  //   function round(v)
+  // {
+  //   return Math.round(v).toNumber();
+  // }
+
+  //  // drawBattery (Light version)
+  // function drawBattery(dc, Gfx, id, x, y)
+  // {
+  //   var batteryPercentage = System.getSystemStats().battery;
+  //   var grayColor = Gfx.COLOR_DK_GRAY;
+    
+  //   dc.setClip(x + 26, y - 10, 2, 20);
+  //   dc.setColor(grayColor, Gfx.COLOR_TRANSPARENT);
+  //   dc.fillCircle(x + 25, y, 3);
+  //   dc.clearClip();
+    
+  //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+  //   dc.fillRectangle(x - 24, y - 9, 48, 18);
+  //   dc.drawRoundedRectangle(x - 24, y - 9, 48, 18, 3);
+    
+  //   dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+  //   dc.fillRoundedRectangle(x - 23, y - 8, 46, 16, 3);
+    
+  //   dc.setColor(grayColor, Gfx.COLOR_TRANSPARENT);
+  //   dc.drawRoundedRectangle(x - 25, y - 10, 50, 20, 3);
+    
+  //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+  //   dc.drawText(x, y - 1, Gfx.FONT_TINY, round(batteryPercentage) + "%", 5 /* Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER */);
+  // }
+
 }
