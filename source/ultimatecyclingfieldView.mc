@@ -15,12 +15,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var currentCadence;
   var averageCadence;
 
-  
   var currentHeartRate;
   var averageHeartRate;
-  var maxHeartRate;
-	// var heartRate;
-	// var heartRateZone;
+
+  hidden var hrZones = [92, 110, 128, 147, 156];
 
   var clockTime;
 
@@ -43,24 +41,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
       info.currentHeartRate != null ? info.currentHeartRate : 0.0;
     averageHeartRate =
       info.averageHeartRate != null ? info.averageHeartRate : 0.0;
-    maxHeartRate = info.maxHeartRate != null ? info.maxHeartRate : 0.0;
-
-    // 	// Heart rate zone
-		// heartRateZone = null;
-
-		// 	var heartRateZones = User.getHeartRateZones(User.getCurrentSport());
-		// 	heartRateZone = '-';
-		// 	if (heartRate != null && heartRate > heartRateZones[0]) {
-		// 		for (var x = 1; x < heartRateZones.size(); x++) {
-		// 			if (heartRate <= heartRateZones[x]) {
-		// 				heartRateZone = x;
-		// 				break;
-		// 			}
-		// 			// We're apparently over the maximum for the highest heart rate zone, so just max out.
-		// 			heartRateZone = '+';
-		// 		}
-		// 	}
-		
   }
 
   function onUpdate(dc) {
@@ -84,37 +64,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
-
-  //  // Choose the colour of the heart rate icon based on heart rate zone
-	// 	var heartRateZoneTextColour = Gfx.COLOR_WHITE;
-	
-  //   if (heartRateZone == 2) {
-	// 		heartRateZoneTextColour = Gfx.COLOR_BLUE;
-	// 	} else if (heartRateZone == 3) {
-	// 		heartRateZoneTextColour = Gfx.COLOR_DK_GREEN;
-	// 	} else if (heartRateZone == 4) {
-	// 		heartRateZoneTextColour = Gfx.COLOR_YELLOW;
-	// 	} else {
-	// 		heartRateZoneTextColour = Gfx.COLOR_RED;
-	// 	}
-
-     // Heart Rate
-
-    // var heartRateIconColour = Gfx.COLOR_GREEN;
-    // var hrIconWidth = 20;
-    // var hrIconY = VERT_OFFSET_ELE + 24;
-    // var hrIconXOffset = 10;
-
-
-    // dc.setColor(heartRateIconColour, Gfx.COLOR_TRANSPARENT);
-		// dc.fillCircle(halfWidth - (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
-		// dc.fillCircle(halfWidth + (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
-		// dc.fillPolygon([
-		// 	[halfWidth - (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset],
-		// 	[halfWidth, hrIconY + (hrIconWidth * 0.95)],
-		// 	[halfWidth + (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset]
-		// ]);
-    //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
@@ -168,7 +117,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       halfWidth,
       VERT_OFFSET_ELE + 12,
       Gfx.FONT_TINY,
-      maxSpeed.format("%.1f") + " kph",
+      "max: " + maxSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -176,23 +125,60 @@ class UltimateCyclingFieldView extends Ui.DataField {
       halfWidth,
       dc.getHeight() / 2 + 36,
       Gfx.FONT_TINY,
-      averageSpeed.format("%.1f") + " kph",
+      "avg: " + averageSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     // Cadence
-
+    dc.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       CAD_POSX,
-      VERT_OFFSET_ELE + 24,
-      Gfx.FONT_TINY,
-      "150",
+      VERT_OFFSET_ELE + 32,
+      Gfx.FONT_XTINY,
+      "CAD",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
+      HR_POSX,
+      VERT_OFFSET_ELE + 32,
+      Gfx.FONT_XTINY,
+      "HR",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+
+    dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+
+    dc.drawText(
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
+      dc.getHeight() / 2 - 24,
+      Gfx.FONT_XTINY,
+      "k",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+    dc.drawText(
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
+      dc.getHeight() / 2 - 12,
+      Gfx.FONT_XTINY,
+      "p",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    dc.drawText(
+      dc.getWidth() - HOR_OFFSET_CAD - 12,
+      dc.getHeight() / 2 + 4,
+      Gfx.FONT_XTINY,
+      "h",
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+
+    dc.drawText(
       CAD_POSX,
-      VERT_OFFSET_ELE + 48,
+      VERT_OFFSET_ELE + 52,
       Gfx.FONT_NUMBER_MILD,
       currentCadence.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -206,18 +192,9 @@ class UltimateCyclingFieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-
     dc.drawText(
       HR_POSX,
-      VERT_OFFSET_ELE + 24,
-      Gfx.FONT_TINY,
-      maxHeartRate.format("%d"),
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      HR_POSX,
-      VERT_OFFSET_ELE + 48,
+      VERT_OFFSET_ELE + 52,
       Gfx.FONT_NUMBER_MILD,
       currentHeartRate.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -269,35 +246,4 @@ class UltimateCyclingFieldView extends Ui.DataField {
       return "0.00";
     }
   }
-
-  //   function round(v)
-  // {
-  //   return Math.round(v).toNumber();
-  // }
-
-  //  // drawBattery (Light version)
-  // function drawBattery(dc, Gfx, id, x, y)
-  // {
-  //   var batteryPercentage = System.getSystemStats().battery;
-  //   var grayColor = Gfx.COLOR_DK_GRAY;
-    
-  //   dc.setClip(x + 26, y - 10, 2, 20);
-  //   dc.setColor(grayColor, Gfx.COLOR_TRANSPARENT);
-  //   dc.fillCircle(x + 25, y, 3);
-  //   dc.clearClip();
-    
-  //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-  //   dc.fillRectangle(x - 24, y - 9, 48, 18);
-  //   dc.drawRoundedRectangle(x - 24, y - 9, 48, 18, 3);
-    
-  //   dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-  //   dc.fillRoundedRectangle(x - 23, y - 8, 46, 16, 3);
-    
-  //   dc.setColor(grayColor, Gfx.COLOR_TRANSPARENT);
-  //   dc.drawRoundedRectangle(x - 25, y - 10, 50, 20, 3);
-    
-  //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-  //   dc.drawText(x, y - 1, Gfx.FONT_TINY, round(batteryPercentage) + "%", 5 /* Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER */);
-  // }
-
 }
