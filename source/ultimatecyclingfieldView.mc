@@ -98,6 +98,24 @@ class UltimateCyclingFieldView extends Ui.DataField {
 	// 		heartRateZoneTextColour = Gfx.COLOR_RED;
 	// 	}
 
+     // Heart Rate
+
+    // var heartRateIconColour = Gfx.COLOR_GREEN;
+    // var hrIconWidth = 20;
+    // var hrIconY = VERT_OFFSET_ELE + 24;
+    // var hrIconXOffset = 10;
+
+
+    // dc.setColor(heartRateIconColour, Gfx.COLOR_TRANSPARENT);
+		// dc.fillCircle(halfWidth - (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
+		// dc.fillCircle(halfWidth + (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
+		// dc.fillPolygon([
+		// 	[halfWidth - (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset],
+		// 	[halfWidth, hrIconY + (hrIconWidth * 0.95)],
+		// 	[halfWidth + (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset]
+		// ]);
+    //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
 
@@ -188,23 +206,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-    // Heart Rate
-
-    // var heartRateIconColour = Gfx.COLOR_GREEN;
-    // var hrIconWidth = 20;
-    // var hrIconY = VERT_OFFSET_ELE + 24;
-    // var hrIconXOffset = 10;
-
-
-    // dc.setColor(heartRateIconColour, Gfx.COLOR_TRANSPARENT);
-		// dc.fillCircle(halfWidth - (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
-		// dc.fillCircle(halfWidth + (hrIconWidth / 4.7), hrIconY + (hrIconWidth / 3.2), hrIconWidth / 3.2);
-		// dc.fillPolygon([
-		// 	[halfWidth - (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset],
-		// 	[halfWidth, hrIconY + (hrIconWidth * 0.95)],
-		// 	[halfWidth + (hrIconWidth / 2.2), hrIconY + (hrIconWidth / 1.8) - hrIconXOffset]
-		// ]);
-    //   dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
     dc.drawText(
       HR_POSX,
