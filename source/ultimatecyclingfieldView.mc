@@ -1,5 +1,5 @@
 import Toybox.Activity;
-using Toybox.Gfx as Gfx;
+using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 // using Toybox.UserProfile as User;
