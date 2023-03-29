@@ -130,7 +130,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     );
 
     // Cadence
-    dc.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
+    dc.setColor(0x026e1f, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       CAD_POSX,
       VERT_OFFSET_ELE + 32,
