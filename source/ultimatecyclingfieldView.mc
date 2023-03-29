@@ -52,7 +52,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
     var CAD_HR_VALUE_HORI_OFFSET = 36;
-    var DIS_TIME_VER_OFFSET = 32;
+    var DIS_TIME_VER_OFFSET = 20;
 
     var HR_POSX = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
     var CAD_POSX = 0 + CAD_HR_VALUE_HORI_OFFSET;
@@ -191,7 +191,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     // Clock and Battery section
     dc.drawText(
       halfWidth - 12,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
       Gfx.FONT_XTINY,
       formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
@@ -199,9 +199,9 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth + 12,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
       Gfx.FONT_XTINY,
-      batteryPercentage.format("%.1f") + "%",
+      batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_LEFT
     );
   }
