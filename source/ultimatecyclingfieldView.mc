@@ -46,6 +46,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   function onUpdate(dc) {
     var darkGreen = Gfx.COLOR_DK_GREEN;
     var halfWidth = dc.getWidth() / 2;
+    var halfHeight = dc.getHeight() / 2;
     var VERT_OFFSET_ELE = dc.getHeight() * 0.2;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
     var CAD_HR_VALUE_HORI_OFFSET = 36;
@@ -102,10 +103,11 @@ class UltimateCyclingFieldView extends Ui.DataField {
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
+    // Speed Section
     dc.setColor(speedColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 4,
-      dc.getHeight() / 2 - 44,
+      halfHeight - 44,
       Gfx.FONT_NUMBER_HOT,
       currentSpeed.format("%d"),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -123,89 +125,46 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      dc.getHeight() / 2 + 36,
+      halfHeight + 36,
       Gfx.FONT_TINY,
       "avg: " + averageSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
-    // Cadence
-    dc.setColor(0x026e1f, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(
+    drawKPH(dc, halfWidth + 40, halfHeight);
+
+    // Cadence Section
+    drawFieldWIthVal(
+      dc,
       CAD_POSX,
-      VERT_OFFSET_ELE + 32,
-      Gfx.FONT_XTINY,
+      VERT_OFFSET_ELE + 16,
       "CAD",
-      Gfx.TEXT_JUSTIFY_CENTER
+      currentCadence.format("%d")
     );
 
-    dc.drawText(
+    drawFieldWIthVal(
+      dc,
+      CAD_POSX,
+      VERT_OFFSET_ELE + 16 + 60,
+      "avg",
+      averageCadence.format("%d")
+    );
+
+    // Heart Rate Section
+    drawFieldWIthVal(
+      dc,
       HR_POSX,
-      VERT_OFFSET_ELE + 32,
-      Gfx.FONT_XTINY,
+      VERT_OFFSET_ELE + 16,
       "HR",
-      Gfx.TEXT_JUSTIFY_CENTER
+      currentHeartRate.format("%d")
     );
 
-    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-
-    dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 - 24,
-      Gfx.FONT_XTINY,
-      "k",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 - 12,
-      Gfx.FONT_XTINY,
-      "p",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      dc.getWidth() - HOR_OFFSET_CAD - 12,
-      dc.getHeight() / 2 + 4,
-      Gfx.FONT_XTINY,
-      "h",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-
-    dc.drawText(
-      CAD_POSX,
-      VERT_OFFSET_ELE + 52,
-      Gfx.FONT_NUMBER_MILD,
-      currentCadence.format("%d"),
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      CAD_POSX,
-      VERT_OFFSET_ELE + 92,
-      Gfx.FONT_TINY,
-      averageCadence.format("%d"),
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
+    drawFieldWIthVal(
+      dc,
       HR_POSX,
-      VERT_OFFSET_ELE + 52,
-      Gfx.FONT_NUMBER_MILD,
-      currentHeartRate.format("%d"),
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      HR_POSX,
-      VERT_OFFSET_ELE + 92,
-      Gfx.FONT_TINY,
-      averageHeartRate.format("%d"),
-      Gfx.TEXT_JUSTIFY_CENTER
+      VERT_OFFSET_ELE + 16 + 60,
+      "avg",
+      averageHeartRate.format("%d")
     );
 
     // Time section
@@ -245,5 +204,24 @@ class UltimateCyclingFieldView extends Ui.DataField {
     } else {
       return "0.00";
     }
+  }
+
+  function drawKPH(dc, x, y) {
+    dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
+    dc.drawText(x, y - 24, Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y - 12, Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
+
+    dc.drawText(x, y + 4, Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+  }
+
+  function drawFieldWIthVal(dc, x, y, label, val) {
+    // label
+    dc.setColor(0x026e1f, Gfx.COLOR_TRANSPARENT);
+    dc.drawText(x, y, Gfx.FONT_XTINY, label, Gfx.TEXT_JUSTIFY_CENTER);
+
+    //value
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+    dc.drawText(x, y + 16, Gfx.FONT_SMALL, val, Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
