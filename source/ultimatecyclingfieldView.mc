@@ -2,11 +2,12 @@ import Toybox.Activity;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
-// using Toybox.UserProfile as User;
 import Toybox.Lang;
 
 class UltimateCyclingFieldView extends Ui.DataField {
   var elapsedDistance;
+
+  var timerTime;
 
   var currentSpeed;
   var averageSpeed;
@@ -29,6 +30,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   function compute(info) {
     elapsedDistance =
       (info.elapsedDistance != null ? info.elapsedDistance : 0) / 1000;
+    timerTime = info.timerTime != null ? info.timerTime : 0;
 
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
     averageSpeed = (info.averageSpeed != null ? info.averageSpeed : 0) * 3.6;
@@ -47,10 +49,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var darkGreen = Gfx.COLOR_DK_GREEN;
     var halfWidth = dc.getWidth() / 2;
     var halfHeight = dc.getHeight() / 2;
-    var VERT_OFFSET_ELE = dc.getHeight() * 0.2;
+    var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
     var CAD_HR_VALUE_HORI_OFFSET = 36;
-    var DIS_TIME_VER_OFFSET = 16;
+    var DIS_TIME_VER_OFFSET = 32;
 
     var HR_POSX = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
     var CAD_POSX = 0 + CAD_HR_VALUE_HORI_OFFSET;
@@ -60,11 +62,13 @@ class UltimateCyclingFieldView extends Ui.DataField {
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed >= 20) {
+    if (currentSpeed >= 25) {
       speedColor = darkGreen;
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
+
+    var batteryPercentage = System.getSystemStats().battery;
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
@@ -92,15 +96,32 @@ class UltimateCyclingFieldView extends Ui.DataField {
       dc.getHeight() - VERT_OFFSET_ELE
     );
 
+    dc.drawLine(halfWidth, 0, halfWidth, VERT_OFFSET_ELE);
+
+    dc.drawLine(
+      halfWidth,
+      dc.getHeight(),
+      halfWidth,
+      dc.getHeight() - VERT_OFFSET_ELE
+    );
+
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
-    // Distance section
+    // Elapsed Time and Distance section
     dc.drawText(
-      halfWidth,
+      halfWidth - 12,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_TINY,
+      Gfx.FONT_XTINY,
       formatDistance(elapsedDistance) + " km",
-      Gfx.TEXT_JUSTIFY_CENTER
+      Gfx.TEXT_JUSTIFY_RIGHT
+    );
+
+    dc.drawText(
+      halfWidth + 12,
+      DIS_TIME_VER_OFFSET,
+      Gfx.FONT_XTINY,
+      formatElapsedTime(timerTime),
+      Gfx.TEXT_JUSTIFY_LEFT
     );
 
     // Speed Section
@@ -117,7 +138,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      VERT_OFFSET_ELE + 12,
+      VERT_OFFSET_ELE + 4,
       Gfx.FONT_TINY,
       "max: " + maxSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -125,7 +146,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      halfHeight + 36,
+      halfHeight + 28,
       Gfx.FONT_TINY,
       "avg: " + averageSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -137,7 +158,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       CAD_POSX,
-      VERT_OFFSET_ELE + 16,
+      VERT_OFFSET_ELE + 12,
       "CAD",
       currentCadence.format("%d")
     );
@@ -145,7 +166,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       CAD_POSX,
-      VERT_OFFSET_ELE + 16 + 60,
+      VERT_OFFSET_ELE + 8 + 60,
       "avg",
       averageCadence.format("%d")
     );
@@ -154,7 +175,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       HR_POSX,
-      VERT_OFFSET_ELE + 16,
+      VERT_OFFSET_ELE + 12,
       "HR",
       currentHeartRate.format("%d")
     );
@@ -162,22 +183,30 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       HR_POSX,
-      VERT_OFFSET_ELE + 16 + 60,
+      VERT_OFFSET_ELE + 8 + 60,
       "avg",
       averageHeartRate.format("%d")
     );
 
-    // Time section
+    // Clock and Battery section
     dc.drawText(
-      halfWidth,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
-      Gfx.FONT_TINY,
-      formatTime(clockTime),
-      Gfx.TEXT_JUSTIFY_CENTER
+      halfWidth - 12,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      Gfx.FONT_XTINY,
+      formatClockTime(clockTime),
+      Gfx.TEXT_JUSTIFY_RIGHT
+    );
+
+    dc.drawText(
+      halfWidth + 12,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      Gfx.FONT_XTINY,
+      batteryPercentage.format("%.1f") + "%",
+      Gfx.TEXT_JUSTIFY_LEFT
     );
   }
 
-  function formatTime(clockTime) {
+  function formatClockTime(clockTime) {
     var hour = clockTime.hour;
     var ampm = "";
     //handle midnight and noon, which return as 0
@@ -189,6 +218,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
       clockTime.min.format("%02d"),
       ampm,
     ]);
+    return timeString;
+  }
+
+  function formatElapsedTime(time) {
+    var seconds = ((time / 1000).toLong() % 60).format("%02d");
+    var minutes = ((time / 60000).toLong() % 60).format("%02d");
+    var hours = (time / 3600000).format("%d");
+    var timeString = hours + ":" + minutes + ":" + seconds;
     return timeString;
   }
 
