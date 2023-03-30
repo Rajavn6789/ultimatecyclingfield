@@ -24,6 +24,9 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var clockTime;
   var batteryPercentage;
 
+  protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
+  protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
+
   function initialize() {
     DataField.initialize();
   }
@@ -181,6 +184,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     );
 
     // Heart Rate Section
+
     drawFieldWIthVal(
       dc,
       HR_POSX,
@@ -264,9 +268,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
   }
 
   function drawFieldWIthVal(dc, x, y, label, val) {
-    // label
-    dc.setColor(0x026e1f, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y, Gfx.FONT_XTINY, label, Gfx.TEXT_JUSTIFY_CENTER);
+    // label or icon
+    if (label.equals("avg")) {
+      dc.drawText(x, y, Gfx.FONT_XTINY, label, Gfx.TEXT_JUSTIFY_CENTER);
+    } else if (label.equals("CAD")) {
+      dc.drawBitmap(x - 8, y + 2, imgCadence);
+    } else if (label.equals("HR")) {
+      dc.drawBitmap(x - 8, y + 2, imgHeart);
+    }
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
