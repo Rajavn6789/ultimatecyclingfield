@@ -22,6 +22,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   hidden var hrZones = [92, 110, 128, 147, 156];
 
   var clockTime;
+  var batteryPercentage;
 
   function initialize() {
     DataField.initialize();
@@ -52,7 +53,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
     var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
     var CAD_HR_VALUE_HORI_OFFSET = 36;
-    var DIS_TIME_VER_OFFSET = 20;
+    var DIS_TIME_VER_OFFSET = 28;
 
     var HR_POSX = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
     var CAD_POSX = 0 + CAD_HR_VALUE_HORI_OFFSET;
@@ -60,6 +61,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var backgroundColour = Gfx.COLOR_WHITE;
 
     clockTime = Sys.getClockTime();
+    batteryPercentage = Sys.getSystemStats().battery;
 
     var speedColor;
     if (currentSpeed >= 25) {
@@ -68,7 +70,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
       speedColor = Gfx.COLOR_BLACK;
     }
 
-    var batteryPercentage = System.getSystemStats().battery;
+    var batteryColor;
+    if (batteryPercentage >= 30 && batteryPercentage < 50) {
+      batteryColor = Gfx.COLOR_YELLOW;
+    } else if (batteryPercentage < 30) {
+      batteryColor = Gfx.COLOR_DK_RED;
+    } else {
+      batteryColor = Gfx.COLOR_BLACK;
+    }
 
     dc.setColor(backgroundColour, backgroundColour);
     dc.fillRectangle(0, 0, dc.getWidth(), dc.getHeight());
@@ -109,7 +118,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     // Elapsed Time and Distance section
     dc.drawText(
-      halfWidth - 12,
+      halfWidth - 18,
       DIS_TIME_VER_OFFSET,
       Gfx.FONT_XTINY,
       formatDistance(elapsedDistance) + " km",
@@ -117,7 +126,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     );
 
     dc.drawText(
-      halfWidth + 12,
+      halfWidth + 18,
       DIS_TIME_VER_OFFSET,
       Gfx.FONT_XTINY,
       formatElapsedTime(timerTime),
@@ -166,7 +175,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       CAD_POSX,
-      VERT_OFFSET_ELE + 8 + 60,
+      VERT_OFFSET_ELE + 8 + 54,
       "avg",
       averageCadence.format("%d")
     );
@@ -183,7 +192,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       HR_POSX,
-      VERT_OFFSET_ELE + 8 + 60,
+      VERT_OFFSET_ELE + 8 + 54,
       "avg",
       averageHeartRate.format("%d")
     );
@@ -191,19 +200,21 @@ class UltimateCyclingFieldView extends Ui.DataField {
     // Clock and Battery section
     dc.drawText(
       halfWidth - 12,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
       Gfx.FONT_XTINY,
       formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
     );
 
+    dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
-      halfWidth + 12,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 24,
+      halfWidth + 18,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
       Gfx.FONT_XTINY,
       batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_LEFT
     );
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
   }
 
   function formatClockTime(clockTime) {
@@ -259,6 +270,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y + 16, Gfx.FONT_SMALL, val, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y + 20, Gfx.FONT_SMALL, val, Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
