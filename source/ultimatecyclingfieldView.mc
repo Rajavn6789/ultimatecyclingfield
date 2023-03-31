@@ -150,17 +150,17 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     // Elapsed Time and Distance section
     dc.drawText(
-      halfWidth - 16,
+      halfWidth - 12,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
     );
 
     dc.drawText(
-      halfWidth + 16,
+      halfWidth + 12,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_LEFT
     );
@@ -180,7 +180,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       VERT_OFFSET_ELE + 4,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -188,7 +188,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       halfHeight + 28,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       "avg: " + averageSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -201,7 +201,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 12,
       "CAD",
-      currentCadence.format("%d") + " rpm"
+      currentCadence.format("%d")
     );
 
     drawFieldWIthVal(
@@ -209,7 +209,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 8 + 54,
       "HR",
-      currentHeartRate.format("%d") + " bpm"
+      currentHeartRate.format("%d")
     );
     // Heart Rate Section
 
@@ -234,7 +234,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth - 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -243,7 +243,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth + 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
-      Gfx.FONT_GLANCE_NUMBER,
+      Gfx.FONT_XTINY,
       formatGPSAccuracy(currentLocationAccuracy),
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -325,12 +325,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(
-      x,
-      y + 16,
-      Gfx.FONT_GLANCE_NUMBER,
-      val,
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
+    dc.drawText(x, y + 16, Gfx.FONT_XTINY, val, Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
