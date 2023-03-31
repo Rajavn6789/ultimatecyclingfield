@@ -1,13 +1,14 @@
+import Toybox.Lang;
 import Toybox.Activity;
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
-import Toybox.Lang;
+using Toybox.Weather as Weather;
 
 class UltimateCyclingFieldView extends Ui.DataField {
   var elapsedDistance;
 
-  var timerTime;
+  var timerTime = 0;
 
   var currentSpeed;
   var averageSpeed;
@@ -23,17 +24,29 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   var clockTime;
   var batteryPercentage;
+  var batteryTimer;
+
+  var currentLocationAccuracy = 0;
+  var temperature;
+
+  var totalAscent;
+  var totalDescent;
+  var calories;
 
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
+  protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
+  protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
 
   function initialize() {
     DataField.initialize();
+    batteryPercentage = Sys.getSystemStats().battery;
   }
 
   function compute(info) {
     elapsedDistance =
       (info.elapsedDistance != null ? info.elapsedDistance : 0) / 1000;
+
     timerTime = info.timerTime != null ? info.timerTime : 0;
 
     currentSpeed = (info.currentSpeed != null ? info.currentSpeed : 0) * 3.6;
@@ -47,6 +60,18 @@ class UltimateCyclingFieldView extends Ui.DataField {
       info.currentHeartRate != null ? info.currentHeartRate : 0.0;
     averageHeartRate =
       info.averageHeartRate != null ? info.averageHeartRate : 0.0;
+
+    var seconds = (timerTime / 1000).toLong() % 60;
+
+    if (seconds == 30) {
+      currentLocationAccuracy =
+        info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
+    }
+
+    totalAscent = (info.totalAscent != null ? info.totalAscent : 0) * 3.28084;
+    totalDescent =
+      (info.totalDescent != null ? info.totalDescent : 0) * 3.28084;
+    calories = info.calories != null ? info.calories : 0;
   }
 
   function onUpdate(dc) {
@@ -64,19 +89,23 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var backgroundColour = Gfx.COLOR_WHITE;
 
     clockTime = Sys.getClockTime();
-    batteryPercentage = Sys.getSystemStats().battery;
 
     var speedColor;
-    if (currentSpeed >= 25) {
+    if (currentSpeed >= 23) {
       speedColor = darkGreen;
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
 
+    var seconds = (timerTime / 1000).toLong() % 60;
+    System.println(seconds % 10);
+
+    if (seconds == 59) {
+      batteryPercentage = Sys.getSystemStats().battery;
+    }
+
     var batteryColor;
-    if (batteryPercentage >= 30 && batteryPercentage < 50) {
-      batteryColor = Gfx.COLOR_YELLOW;
-    } else if (batteryPercentage < 30) {
+    if (batteryPercentage <= 30) {
       batteryColor = Gfx.COLOR_DK_RED;
     } else {
       batteryColor = Gfx.COLOR_BLACK;
@@ -121,17 +150,17 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     // Elapsed Time and Distance section
     dc.drawText(
-      halfWidth - 18,
+      halfWidth - 16,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_XTINY,
-      formatDistance(elapsedDistance) + " km",
+      Gfx.FONT_GLANCE_NUMBER,
+      formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
     );
 
     dc.drawText(
-      halfWidth + 18,
+      halfWidth + 16,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_XTINY,
+      Gfx.FONT_GLANCE_NUMBER,
       formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_LEFT
     );
@@ -151,15 +180,15 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       VERT_OFFSET_ELE + 4,
-      Gfx.FONT_TINY,
-      "max: " + maxSpeed.format("%.1f"),
+      Gfx.FONT_GLANCE_NUMBER,
+      formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     dc.drawText(
       halfWidth,
       halfHeight + 28,
-      Gfx.FONT_TINY,
+      Gfx.FONT_GLANCE_NUMBER,
       "avg: " + averageSpeed.format("%.1f"),
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -172,53 +201,52 @@ class UltimateCyclingFieldView extends Ui.DataField {
       CAD_POSX,
       VERT_OFFSET_ELE + 12,
       "CAD",
-      currentCadence.format("%d")
+      currentCadence.format("%d") + " rpm"
     );
 
     drawFieldWIthVal(
       dc,
       CAD_POSX,
       VERT_OFFSET_ELE + 8 + 54,
-      "avg",
-      averageCadence.format("%d")
+      "HR",
+      currentHeartRate.format("%d") + " bpm"
     );
-
     // Heart Rate Section
 
     drawFieldWIthVal(
       dc,
       HR_POSX,
       VERT_OFFSET_ELE + 12,
-      "HR",
-      currentHeartRate.format("%d")
+      "asc",
+      totalAscent.format("%.1f") + " ft"
     );
 
     drawFieldWIthVal(
       dc,
       HR_POSX,
       VERT_OFFSET_ELE + 8 + 54,
-      "avg",
-      averageHeartRate.format("%d")
+      "dsc",
+      totalDescent.format("%.1f") + " ft"
     );
 
     // Clock and Battery section
-    dc.drawText(
-      halfWidth - 12,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
-      Gfx.FONT_XTINY,
-      formatClockTime(clockTime),
-      Gfx.TEXT_JUSTIFY_RIGHT
-    );
-
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
-      halfWidth + 18,
+      halfWidth - 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
-      Gfx.FONT_XTINY,
+      Gfx.FONT_GLANCE_NUMBER,
       batteryPercentage.format("%.1f") + " %",
-      Gfx.TEXT_JUSTIFY_LEFT
+      Gfx.TEXT_JUSTIFY_CENTER
     );
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+
+    dc.drawText(
+      halfWidth + 32,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      Gfx.FONT_GLANCE_NUMBER,
+      formatGPSAccuracy(currentLocationAccuracy),
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
   }
 
   function formatClockTime(clockTime) {
@@ -258,6 +286,22 @@ class UltimateCyclingFieldView extends Ui.DataField {
     }
   }
 
+  function formatGPSAccuracy(value) {
+    var gps;
+    if (value == 1) {
+      gps = "bad";
+    } else if (value == 2) {
+      gps = "poor";
+    } else if (value == 3) {
+      gps = "usable";
+    } else if (value == 4) {
+      gps = "good";
+    } else {
+      gps = "na";
+    }
+    return gps;
+  }
+
   function drawKPH(dc, x, y) {
     dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
     dc.drawText(x, y - 24, Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
@@ -269,8 +313,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   function drawFieldWIthVal(dc, x, y, label, val) {
     // label or icon
-    if (label.equals("avg")) {
-      dc.drawText(x, y, Gfx.FONT_XTINY, label, Gfx.TEXT_JUSTIFY_CENTER);
+    if (label.equals("asc")) {
+      dc.drawBitmap(x - 8, y + 2, imgAscent);
+    } else if (label.equals("dsc")) {
+      dc.drawBitmap(x - 8, y + 2, imgDescent);
     } else if (label.equals("CAD")) {
       dc.drawBitmap(x - 8, y + 2, imgCadence);
     } else if (label.equals("HR")) {
@@ -279,6 +325,12 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y + 20, Gfx.FONT_SMALL, val, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(
+      x,
+      y + 16,
+      Gfx.FONT_GLANCE_NUMBER,
+      val,
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
   }
 }

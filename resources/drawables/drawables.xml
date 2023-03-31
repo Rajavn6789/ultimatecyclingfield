@@ -2,4 +2,6 @@
     <bitmap id="LauncherIcon" filename="launcher_icon.png" />
     <bitmap id="HeartIcon" filename="heart_icon_v4.png" />
     <bitmap id="CadenceIcon" filename="cadence_icon_v6.png" />
+    <bitmap id="AscentIcon" filename="ascent_icon.png" />
+    <bitmap id="DescentIcon" filename="descent_icon.png" />
 </drawables>
