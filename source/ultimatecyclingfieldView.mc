@@ -232,23 +232,22 @@ class UltimateCyclingFieldView extends Ui.DataField {
       totalDescent.format("%.1f") + " ft"
     );
 
-    // Clock and Battery section
+    // Battery and GPS section
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 32,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
       Gfx.FONT_XTINY,
       batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_CENTER
     );
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
-    dc.drawText(
-      halfWidth + 32,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 20,
-      Gfx.FONT_XTINY,
-      formatGPSAccuracy(currentLocationAccuracy),
-      Gfx.TEXT_JUSTIFY_CENTER
+    drawGPSSection(
+      dc,
+      halfWidth + 24,
+      dc.getHeight() - DIS_TIME_VER_OFFSET - 4,
+      currentLocationAccuracy
     );
   }
 
@@ -315,6 +314,36 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(x, y - 12, Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
 
     dc.drawText(x, y + 4, Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
+  }
+
+  function drawGPSSection(dc, x, y, accuracy) {
+    var width = 5;
+    var margin = width + 2;
+    var offset = 4;
+
+    dc.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
+    dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
+    dc.fillRectangle(x + margin * 1, y - offset * 1, width, offset * 2);
+    dc.fillRectangle(x + margin * 2, y - offset * 2, width, offset * 3);
+    dc.fillRectangle(x + margin * 3, y - offset * 3, width, offset * 4);
+
+    dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
+    if (accuracy == 4) {
+      dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
+      dc.fillRectangle(x + margin * 1, y - offset * 1, width, offset * 2);
+      dc.fillRectangle(x + margin * 2, y - offset * 2, width, offset * 3);
+      dc.fillRectangle(x + margin * 3, y - offset * 3, width, offset * 4);
+    } else if (accuracy == 3) {
+      dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
+      dc.fillRectangle(x + margin * 1, y - offset * 1, width, offset * 2);
+      dc.fillRectangle(x + margin * 2, y - offset * 2, width, offset * 3);
+    } else if (accuracy == 2) {
+      dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
+      dc.fillRectangle(x + margin * 1, y - offset * 1, width, offset * 2);
+    } else if (accuracy == 1) {
+      dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
+    }
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
   }
 
