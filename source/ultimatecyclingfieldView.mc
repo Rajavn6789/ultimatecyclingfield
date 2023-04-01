@@ -96,9 +96,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
       speedColor = Gfx.COLOR_BLACK;
     }
 
-    Sys.println(getMinutes(clockTime));
     if (
-      getMinutes(clockTime) % 2 == 0 &&
+      getMinutes(clockTime) % 5 == 0 &&
       getMinutes(clockTime) != prevBatteryFetchedMin
     ) {
       batteryPercentage = Sys.getSystemStats().battery;
