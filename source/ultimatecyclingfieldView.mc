@@ -33,6 +33,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var totalDescent;
   var calories;
 
+  var prevBatteryFetchedMin;
+
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
@@ -41,6 +43,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   function initialize() {
     DataField.initialize();
     batteryPercentage = Sys.getSystemStats().battery;
+    prevBatteryFetchedMin = 0;
   }
 
   function compute(info) {
@@ -63,10 +66,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     var seconds = (timerTime / 1000).toLong() % 60;
 
-    if (seconds == 30) {
-      currentLocationAccuracy =
-        info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
-    }
+    currentLocationAccuracy =
+      info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
 
     totalAscent = (info.totalAscent != null ? info.totalAscent : 0) * 3.28084;
     totalDescent =
@@ -97,11 +98,13 @@ class UltimateCyclingFieldView extends Ui.DataField {
       speedColor = Gfx.COLOR_BLACK;
     }
 
-    var seconds = (timerTime / 1000).toLong() % 60;
-    System.println(seconds % 10);
-
-    if (seconds == 59) {
+    Sys.println(getMinutes(clockTime));
+    if (
+      getMinutes(clockTime) % 5 == 0 &&
+      getMinutes(clockTime) != prevBatteryFetchedMin
+    ) {
       batteryPercentage = Sys.getSystemStats().battery;
+      prevBatteryFetchedMin = getMinutes(clockTime);
     }
 
     var batteryColor;
@@ -179,7 +182,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      VERT_OFFSET_ELE + 4,
+      VERT_OFFSET_ELE + 8,
       Gfx.FONT_XTINY,
       formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_CENTER
@@ -187,9 +190,9 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      halfHeight + 28,
+      halfHeight + 32,
       Gfx.FONT_XTINY,
-      "avg: " + averageSpeed.format("%.1f"),
+      averageSpeed.format("%.2f") + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -262,6 +265,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
       ampm,
     ]);
     return timeString;
+  }
+
+  function getMinutes(clockTime) {
+    return clockTime.min;
   }
 
   function formatElapsedTime(time) {
