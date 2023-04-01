@@ -64,8 +64,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
     averageHeartRate =
       info.averageHeartRate != null ? info.averageHeartRate : 0.0;
 
-    var seconds = (timerTime / 1000).toLong() % 60;
-
     currentLocationAccuracy =
       info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
 
