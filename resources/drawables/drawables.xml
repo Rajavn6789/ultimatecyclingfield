@@ -4,4 +4,5 @@
     <bitmap id="CadenceIcon" filename="cadence_icon_v6.png" />
     <bitmap id="AscentIcon" filename="ascent_icon.png" />
     <bitmap id="DescentIcon" filename="descent_icon.png" />
+    <bitmap id="CaloriesIcon" filename="calories_icon_v3.png" />
 </drawables>

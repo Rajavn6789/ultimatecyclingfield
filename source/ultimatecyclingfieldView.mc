@@ -30,7 +30,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var temperature;
 
   var totalAscent;
-  var totalDescent;
   var calories;
 
   var prevBatteryFetchedMin;
@@ -38,7 +37,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
-  protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
+  protected var imgCal = WatchUi.loadResource(Rez.Drawables.CaloriesIcon);
 
   function initialize() {
     DataField.initialize();
@@ -68,8 +67,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
       info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
 
     totalAscent = (info.totalAscent != null ? info.totalAscent : 0) * 3.28084;
-    totalDescent =
-      (info.totalDescent != null ? info.totalDescent : 0) * 3.28084;
     calories = info.calories != null ? info.calories : 0;
   }
 
@@ -200,7 +197,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       dc,
       CAD_POSX,
       VERT_OFFSET_ELE + 12,
-      "CAD",
+      "cad",
       currentCadence.format("%d")
     );
 
@@ -208,7 +205,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       dc,
       CAD_POSX,
       VERT_OFFSET_ELE + 8 + 54,
-      "HR",
+      "hr",
       currentHeartRate.format("%d")
     );
     // Heart Rate Section
@@ -217,16 +214,16 @@ class UltimateCyclingFieldView extends Ui.DataField {
       dc,
       HR_POSX,
       VERT_OFFSET_ELE + 12,
-      "asc",
-      totalAscent.format("%.1f") + " ft"
+      "cal",
+      calories.format("%d") + " kcal"
     );
 
     drawFieldWIthVal(
       dc,
       HR_POSX,
       VERT_OFFSET_ELE + 8 + 54,
-      "dsc",
-      totalDescent.format("%.1f") + " ft"
+      "asc",
+      totalAscent.format("%.1f") + " ft"
     );
 
     // Battery and GPS section
@@ -360,11 +357,11 @@ class UltimateCyclingFieldView extends Ui.DataField {
     // label or icon
     if (label.equals("asc")) {
       dc.drawBitmap(x - 8, y + 2, imgAscent);
-    } else if (label.equals("dsc")) {
-      dc.drawBitmap(x - 8, y + 2, imgDescent);
-    } else if (label.equals("CAD")) {
+    } else if (label.equals("cal")) {
+      dc.drawBitmap(x - 8, y + 2, imgCal);
+    } else if (label.equals("cad")) {
       dc.drawBitmap(x - 8, y + 2, imgCadence);
-    } else if (label.equals("HR")) {
+    } else if (label.equals("hr")) {
       dc.drawBitmap(x - 8, y + 2, imgHeart);
     }
 
