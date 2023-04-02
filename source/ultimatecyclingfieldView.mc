@@ -315,11 +315,11 @@ class UltimateCyclingFieldView extends Ui.DataField {
   }
 
   function drawGPSSection(dc, x, y, accuracy) {
-    var width = 5;
+    var width = 7;
     var margin = width + 2;
     var offset = 4;
 
-    dc.setColor(Gfx.COLOR_LT_GRAY, Gfx.COLOR_TRANSPARENT);
+    dc.setColor(0xc3c3c3, Gfx.COLOR_TRANSPARENT);
     dc.fillRectangle(x + margin * 0, y - offset * 0, width, offset * 1);
     dc.fillRectangle(x + margin * 1, y - offset * 1, width, offset * 2);
     dc.fillRectangle(x + margin * 2, y - offset * 2, width, offset * 3);
