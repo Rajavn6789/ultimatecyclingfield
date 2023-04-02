@@ -33,6 +33,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var calories;
 
   var prevBatteryFetchedMin;
+  var prevBatteryPercentage;
+  var batteryConsumptionData;
+  var batteryConsumption;
+  var batteryInfo;
 
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
@@ -42,6 +46,9 @@ class UltimateCyclingFieldView extends Ui.DataField {
   function initialize() {
     DataField.initialize();
     batteryPercentage = Sys.getSystemStats().battery;
+    batteryConsumptionData = new DataQueue(10);
+    batteryInfo = "battery";
+    batteryConsumption = 0;
     prevBatteryFetchedMin = 0;
   }
 
@@ -94,11 +101,23 @@ class UltimateCyclingFieldView extends Ui.DataField {
     }
 
     if (
-      getMinutes(clockTime) % 5 == 0 &&
+      getMinutes(clockTime) % 2 == 0 &&
       getMinutes(clockTime) != prevBatteryFetchedMin
     ) {
       batteryPercentage = Sys.getSystemStats().battery;
       prevBatteryFetchedMin = getMinutes(clockTime);
+      batteryConsumptionData.add(batteryPercentage);
+    }
+
+    if (isBetween(20, 40, getSeconds(clockTime))) {
+      batteryInfo = "consumption";
+      if (batteryConsumptionData.size >= 2) {
+        batteryConsumption =
+          batteryConsumptionData.getNewest() -
+          batteryConsumptionData.getOldest();
+      }
+    } else {
+      batteryInfo = "battery";
     }
 
     var batteryColor;
@@ -228,13 +247,23 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     // Battery and GPS section
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(
-      halfWidth - 32,
-      dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
-      Gfx.FONT_XTINY,
-      batteryPercentage.format("%.1f") + " %",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
+    if (batteryInfo.equals("battery")) {
+      dc.drawText(
+        halfWidth - 32,
+        dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
+        Gfx.FONT_XTINY,
+        batteryPercentage.format("%.1f") + " %",
+        Gfx.TEXT_JUSTIFY_CENTER
+      );
+    } else {
+      dc.drawText(
+        halfWidth - 32,
+        dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
+        Gfx.FONT_XTINY,
+        batteryConsumption.format("%.1f") + " % hr",
+        Gfx.TEXT_JUSTIFY_CENTER
+      );
+    }
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
     drawGPSSection(
@@ -262,6 +291,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   function getMinutes(clockTime) {
     return clockTime.min;
+  }
+
+  function getSeconds(clockTime) {
+    return clockTime.sec;
+  }
+
+  function isBetween(min, max, val) {
+    return val >= min && val <= max;
   }
 
   function formatElapsedTime(time) {
