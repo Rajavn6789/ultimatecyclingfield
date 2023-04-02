@@ -30,6 +30,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var temperature;
 
   var totalAscent;
+  var totalDescent;
   var calories;
 
   var prevBatteryFetchedMin;
@@ -37,6 +38,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
+  protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
   protected var imgCal = WatchUi.loadResource(Rez.Drawables.CaloriesIcon);
 
   function initialize() {
@@ -67,6 +69,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
       info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
 
     totalAscent = (info.totalAscent != null ? info.totalAscent : 0) * 3.28084;
+    totalDescent =
+      (info.totalDescent != null ? info.totalDescent : 0) * 3.28084;
     calories = info.calories != null ? info.calories : 0;
   }
 
@@ -74,13 +78,13 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var darkGreen = Gfx.COLOR_DK_GREEN;
     var halfWidth = dc.getWidth() / 2;
     var halfHeight = dc.getHeight() / 2;
-    var VERT_OFFSET_ELE = dc.getHeight() * 0.25;
-    var HOR_OFFSET_CAD = dc.getWidth() * 0.28;
+    var CENTER_PADDING_TB = dc.getHeight() * 0.25;
+    var CENTER_PADDING_LR = dc.getWidth() * 0.28;
     var CAD_HR_VALUE_HORI_OFFSET = 36;
     var DIS_TIME_VER_OFFSET = 28;
 
-    var HR_POSX = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
-    var CAD_POSX = 0 + CAD_HR_VALUE_HORI_OFFSET;
+    var RIGHT_POS_X = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
+    var LEFT_POS_X = 0 + CAD_HR_VALUE_HORI_OFFSET;
 
     var backgroundColour = Gfx.COLOR_WHITE;
 
@@ -113,43 +117,43 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     // Draw  Lines
     dc.setColor(darkGreen, Gfx.COLOR_TRANSPARENT);
-    dc.drawLine(0, VERT_OFFSET_ELE, dc.getWidth(), VERT_OFFSET_ELE);
+    dc.drawLine(0, CENTER_PADDING_TB, dc.getWidth(), CENTER_PADDING_TB);
     dc.drawLine(
       0,
-      dc.getHeight() - VERT_OFFSET_ELE,
+      dc.getHeight() - CENTER_PADDING_TB,
       dc.getWidth(),
-      dc.getHeight() - VERT_OFFSET_ELE
+      dc.getHeight() - CENTER_PADDING_TB
     );
 
     dc.drawLine(
-      HOR_OFFSET_CAD,
-      VERT_OFFSET_ELE,
-      HOR_OFFSET_CAD,
-      dc.getHeight() - VERT_OFFSET_ELE
+      CENTER_PADDING_LR,
+      CENTER_PADDING_TB,
+      CENTER_PADDING_LR,
+      dc.getHeight() - CENTER_PADDING_TB
     );
     dc.drawLine(
-      dc.getWidth() - HOR_OFFSET_CAD,
-      VERT_OFFSET_ELE,
-      dc.getWidth() - HOR_OFFSET_CAD,
-      dc.getHeight() - VERT_OFFSET_ELE
+      dc.getWidth() - CENTER_PADDING_LR,
+      CENTER_PADDING_TB,
+      dc.getWidth() - CENTER_PADDING_LR,
+      dc.getHeight() - CENTER_PADDING_TB
     );
 
-    dc.drawLine(halfWidth, 0, halfWidth, VERT_OFFSET_ELE);
+    dc.drawLine(halfWidth, 0, halfWidth, CENTER_PADDING_TB);
 
     dc.drawLine(
       halfWidth,
       dc.getHeight(),
       halfWidth,
-      dc.getHeight() - VERT_OFFSET_ELE
+      dc.getHeight() - CENTER_PADDING_TB
     );
 
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
 
-    // Elapsed Time and Distance section
+    // TOP: Elapsed Time and Distance section
     dc.drawText(
       halfWidth - 12,
       DIS_TIME_VER_OFFSET,
-     Gfx.FONT_XTINY,
+      Gfx.FONT_XTINY,
       formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
     );
@@ -157,12 +161,38 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth + 12,
       DIS_TIME_VER_OFFSET,
-     Gfx.FONT_XTINY,
-      formatElapsedTime(timerTime),
+      Gfx.FONT_XTINY,
+      formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_LEFT
     );
 
-    // Speed Section
+    //LEFT: Elevation Section
+    drawFieldWIthVal(
+      dc,
+      LEFT_POS_X,
+      CENTER_PADDING_TB + 12,
+      "cad",
+      currentCadence.format("%d")
+    );
+
+    drawFieldWIthVal(
+      dc,
+      LEFT_POS_X,
+      CENTER_PADDING_TB + 8 + 54,
+      "hr",
+      currentHeartRate.format("%d")
+    );
+
+    // CENTER: Speed
+    dc.drawText(
+      halfWidth,
+      CENTER_PADDING_TB + 8,
+      Gfx.FONT_GLANCE_NUMBER,
+      averageSpeed.format("%.2f") + " kph",
+
+      Gfx.TEXT_JUSTIFY_CENTER
+    );
+
     dc.setColor(speedColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 4,
@@ -176,62 +206,37 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      VERT_OFFSET_ELE + 8,
-     Gfx.FONT_TINY,
-      formatDistance(elapsedDistance) + " km",
-      Gfx.TEXT_JUSTIFY_CENTER
-    );
-
-    dc.drawText(
-      halfWidth,
       halfHeight + 32,
-     Gfx.FONT_TINY,
-      averageSpeed.format("%.2f") + " kph",
+      Gfx.FONT_GLANCE_NUMBER,
+      formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     drawKPH(dc, halfWidth + 40, halfHeight);
 
-    // Cadence Section
+    // RIGHT: Elevation Section
     drawFieldWIthVal(
       dc,
-      CAD_POSX,
-      VERT_OFFSET_ELE + 12,
-      "cad",
-      currentCadence.format("%d")
-    );
-
-    drawFieldWIthVal(
-      dc,
-      CAD_POSX,
-      VERT_OFFSET_ELE + 8 + 54,
-      "hr",
-      currentHeartRate.format("%d")
-    );
-    // Heart Rate Section
-
-    drawFieldWIthVal(
-      dc,
-      HR_POSX,
-      VERT_OFFSET_ELE + 12,
-      "cal",
-      calories.format("%d") 
-    );
-
-    drawFieldWIthVal(
-      dc,
-      HR_POSX,
-      VERT_OFFSET_ELE + 8 + 54,
+      RIGHT_POS_X,
+      CENTER_PADDING_TB + 12,
       "asc",
       totalAscent.format("%.1f")
     );
 
-    // Battery and GPS section
+    drawFieldWIthVal(
+      dc,
+      RIGHT_POS_X,
+      CENTER_PADDING_TB + 8 + 54,
+      "desc",
+      totalDescent.format("%.1f")
+    );
+
+    // BOTTOM: Battery and GPS section
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
-     Gfx.FONT_XTINY,
+      Gfx.FONT_XTINY,
       batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -304,10 +309,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   function drawKPH(dc, x, y) {
     dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y - 24,Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(x, y - 12,Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y - 24, Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y - 12, Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
 
-    dc.drawText(x, y + 4,Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y + 4, Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
   }
 
@@ -345,6 +350,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
     // label or icon
     if (label.equals("asc")) {
       dc.drawBitmap(x - 8, y + 2, imgAscent);
+    } else if (label.equals("desc")) {
+      dc.drawBitmap(x - 8, y + 2, imgDescent);
     } else if (label.equals("cal")) {
       dc.drawBitmap(x - 8, y + 2, imgCal);
     } else if (label.equals("cad")) {
@@ -355,6 +362,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y + 16,Gfx.FONT_TINY, val, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y + 16, Gfx.FONT_TINY, val, Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
