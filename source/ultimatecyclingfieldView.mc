@@ -187,9 +187,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       CENTER_PADDING_TB + 8,
-      Gfx.FONT_GLANCE_NUMBER,
-      averageSpeed.format("%.2f") + " kph",
-
+      Gfx.FONT_XTINY,
+      formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
@@ -207,8 +206,8 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       halfHeight + 32,
-      Gfx.FONT_GLANCE_NUMBER,
-      formatElapsedTime(timerTime),
+      Gfx.FONT_XTINY,
+      averageSpeed.format("%.2f") + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
