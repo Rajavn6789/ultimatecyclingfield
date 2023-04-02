@@ -149,7 +149,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth - 12,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_XTINY,
+     Gfx.FONT_XTINY,
       formatClockTime(clockTime),
       Gfx.TEXT_JUSTIFY_RIGHT
     );
@@ -157,7 +157,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth + 12,
       DIS_TIME_VER_OFFSET,
-      Gfx.FONT_XTINY,
+     Gfx.FONT_XTINY,
       formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_LEFT
     );
@@ -177,7 +177,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       VERT_OFFSET_ELE + 8,
-      Gfx.FONT_XTINY,
+     Gfx.FONT_TINY,
       formatDistance(elapsedDistance) + " km",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -185,7 +185,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth,
       halfHeight + 32,
-      Gfx.FONT_XTINY,
+     Gfx.FONT_TINY,
       averageSpeed.format("%.2f") + " kph",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -215,7 +215,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       HR_POSX,
       VERT_OFFSET_ELE + 12,
       "cal",
-      calories.format("%d") + " kcal"
+      calories.format("%d") 
     );
 
     drawFieldWIthVal(
@@ -223,7 +223,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       HR_POSX,
       VERT_OFFSET_ELE + 8 + 54,
       "asc",
-      totalAscent.format("%.1f") + " ft"
+      totalAscent.format("%.1f")
     );
 
     // Battery and GPS section
@@ -231,7 +231,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     dc.drawText(
       halfWidth - 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
-      Gfx.FONT_XTINY,
+     Gfx.FONT_XTINY,
       batteryPercentage.format("%.1f") + " %",
       Gfx.TEXT_JUSTIFY_CENTER
     );
@@ -304,10 +304,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   function drawKPH(dc, x, y) {
     dc.setColor(Gfx.COLOR_DK_GRAY, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y - 24, Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
-    dc.drawText(x, y - 12, Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y - 24,Gfx.FONT_XTINY, "k", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y - 12,Gfx.FONT_XTINY, "p", Gfx.TEXT_JUSTIFY_CENTER);
 
-    dc.drawText(x, y + 4, Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y + 4,Gfx.FONT_XTINY, "h", Gfx.TEXT_JUSTIFY_CENTER);
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
   }
 
@@ -355,6 +355,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-    dc.drawText(x, y + 16, Gfx.FONT_XTINY, val, Gfx.TEXT_JUSTIFY_CENTER);
+    dc.drawText(x, y + 16,Gfx.FONT_TINY, val, Gfx.TEXT_JUSTIFY_CENTER);
   }
 }
