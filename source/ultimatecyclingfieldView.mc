@@ -19,8 +19,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
   var currentHeartRate;
   var averageHeartRate;
-
-  hidden var hrZones = [92, 110, 128, 147, 156];
+  protected var hrZones;
 
   var clockTime;
   var batteryPercentage;
@@ -36,6 +35,12 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var prevBatteryFetchedMin;
 
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
+  protected var imgHeartZ1 = WatchUi.loadResource(Rez.Drawables.HeartIconZ1);
+  protected var imgHeartZ2 = WatchUi.loadResource(Rez.Drawables.HeartIconZ2);
+  protected var imgHeartZ3 = WatchUi.loadResource(Rez.Drawables.HeartIconZ3);
+  protected var imgHeartZ4 = WatchUi.loadResource(Rez.Drawables.HeartIconZ4);
+  protected var imgHeartZ5 = WatchUi.loadResource(Rez.Drawables.HeartIconZ5);
+
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
   protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
@@ -45,6 +50,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     DataField.initialize();
     batteryPercentage = Sys.getSystemStats().battery;
     prevBatteryFetchedMin = 0;
+    hrZones = UserProfile.getHeartRateZones(UserProfile.getCurrentSport());
   }
 
   function compute(info) {
@@ -356,11 +362,37 @@ class UltimateCyclingFieldView extends Ui.DataField {
     } else if (label.equals("cad")) {
       dc.drawBitmap(x - 8, y + 2, imgCadence);
     } else if (label.equals("hr")) {
-      dc.drawBitmap(x - 8, y + 2, imgHeart);
+      dc.drawBitmap(x - 8, y + 2, getHRImage(val.toNumber()));
     }
 
     //value
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
     dc.drawText(x, y + 16, Gfx.FONT_TINY, val, Gfx.TEXT_JUSTIFY_CENTER);
+  }
+
+  function isBetween(min, max, val) {
+    return val >= min && val <= max;
+  }
+
+  function getHRImage(val) {
+    var image;
+    if (isBetween(hrZones[0], hrZones[1], val)) {
+      image = imgHeartZ1;
+    } else if (isBetween(hrZones[1], hrZones[2], val)) {
+      image = imgHeartZ2;
+    } else if (isBetween(hrZones[2], hrZones[3], val)) {
+      image = imgHeartZ3;
+    } else if (isBetween(hrZones[3], hrZones[4], val)) {
+      image = imgHeartZ4;
+    } else if (val > hrZones[4]) {
+      image = imgHeartZ5;
+    } else {
+      image = imgHeart;
+    }
+    return image;
+  }
+
+  function log(text) {
+    System.println(text);
   }
 }

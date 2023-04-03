@@ -1,8 +1,13 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon_v2.png" />
-    <bitmap id="HeartIcon" filename="heart_icon.png" />
-    <bitmap id="CadenceIcon" filename="cadence_icon.png" />
-    <bitmap id="AscentIcon" filename="ascent_icon.png" />
-    <bitmap id="DescentIcon" filename="descent_icon.png" />
-    <bitmap id="CaloriesIcon" filename="calories_icon_v3.png" />
+    <bitmap id="HeartIcon" filename="heart_icon.png" dithering="none" />
+    <bitmap id="HeartIconZ1" filename="heart_icon_grey.png" dithering="none" />
+    <bitmap id="HeartIconZ2" filename="heart_icon_blue.png" dithering="none" />
+    <bitmap id="HeartIconZ3" filename="heart_icon_green.png" dithering="none" />
+    <bitmap id="HeartIconZ4" filename="heart_icon_orange.png" dithering="none" />
+    <bitmap id="HeartIconZ5" filename="heart_icon_red.png" dithering="none" />
+    <bitmap id="CadenceIcon" filename="cadence_icon.png" dithering="none" />
+    <bitmap id="AscentIcon" filename="ascent_icon.png" dithering="none" />
+    <bitmap id="DescentIcon" filename="descent_icon.png" dithering="none" />
+    <bitmap id="CaloriesIcon" filename="calories_icon_v3.png" dithering="none" />
 </drawables>
