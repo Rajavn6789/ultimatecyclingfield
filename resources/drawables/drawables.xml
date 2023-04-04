@@ -1,7 +1,7 @@
 <drawables>
     <bitmap id="LauncherIcon" filename="launcher_icon_v2.png" />
     <bitmap id="HeartIcon" filename="heart_icon.png" dithering="none" />
-    <bitmap id="HeartIconZ1" filename="heart_icon_grey.png" dithering="none" />
+    <bitmap id="HeartIconZ1" filename="heart_icon_dk_grey.png" dithering="none" />
     <bitmap id="HeartIconZ2" filename="heart_icon_blue.png" dithering="none" />
     <bitmap id="HeartIconZ3" filename="heart_icon_green.png" dithering="none" />
     <bitmap id="HeartIconZ4" filename="heart_icon_orange.png" dithering="none" />
