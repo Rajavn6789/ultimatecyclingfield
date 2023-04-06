@@ -28,9 +28,13 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var currentLocationAccuracy = 0;
   var temperature;
 
+  var altitude;
   var totalAscent;
   var totalDescent;
+
+  var trainingEffect;
   var calories;
+  var energyExpenditure;
 
   var valuesType;
 
@@ -47,6 +51,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
   protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
   protected var imgCal = WatchUi.loadResource(Rez.Drawables.CaloriesIcon);
+  protected var imgEnergy = WatchUi.loadResource(Rez.Drawables.EnergyIcon);
 
   function initialize() {
     DataField.initialize();
@@ -71,15 +76,17 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     currentHeartRate =
       info.currentHeartRate != null ? info.currentHeartRate : 0.0;
-    averageHeartRate =
-      info.averageHeartRate != null ? info.averageHeartRate : 0.0;
 
+    altitude = info.altitude != null ? info.altitude : 0;
     currentLocationAccuracy =
       info.currentLocationAccuracy != null ? info.currentLocationAccuracy : 0;
 
     totalAscent = (info.totalAscent != null ? info.totalAscent : 0) * 3.28084;
     totalDescent =
       (info.totalDescent != null ? info.totalDescent : 0) * 3.28084;
+
+    energyExpenditure =
+      info.energyExpenditure != null ? info.energyExpenditure : 0;
     calories = info.calories != null ? info.calories : 0;
   }
 
@@ -100,18 +107,25 @@ class UltimateCyclingFieldView extends Ui.DataField {
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed >= 20 && currentSpeed <= 25) {
+    if (currentSpeed >= 25 && currentSpeed <= 35) {
       speedColor = darkGreen;
-    } else if (currentSpeed > 25) {
+    } else if (currentSpeed > 35) {
       speedColor = Gfx.COLOR_DK_RED;
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
 
-    if (getSeconds(clockTime) <= 30) {
+    // Alternate between primary and secondary fields
+    if (getSeconds(clockTime) <= 15) {
       valuesType = "primary";
-    } else {
+    } else if (getSeconds(clockTime) > 15 && getSeconds(clockTime) <= 30) {
       valuesType = "secondary";
+    } else if (getSeconds(clockTime) > 30 && getSeconds(clockTime) <= 45) {
+      valuesType = "primary";
+    } else if (getSeconds(clockTime) > 45 && getSeconds(clockTime) <= 59) {
+      valuesType = "secondary";
+    } else {
+      valuesType = "primary";
     }
 
     if (
@@ -206,7 +220,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 4,
         Gfx.FONT_XTINY,
-        "avg: " + averageSpeed.format("%.2f") + " kph",
+        averageSpeed.format("%.2f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
@@ -214,7 +228,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 4,
         Gfx.FONT_XTINY,
-        "10k: " + getTenKmPace(averageSpeed) + " mins",
+        "10k in " + getTenKmPace(averageSpeed) + " min",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     }
@@ -234,28 +248,47 @@ class UltimateCyclingFieldView extends Ui.DataField {
       halfWidth,
       halfHeight + 36,
       Gfx.FONT_XTINY,
-      "ela: " + formatElapsedTime(timerTime),
+      formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
     drawKPH(dc, halfWidth + 44, halfHeight);
 
     // RIGHT: Elevation Section
-    drawFieldWIthVal(
-      dc,
-      RIGHT_POS_X,
-      CENTER_PADDING_TB + 12,
-      "asc",
-      totalAscent.format("%d")
-    );
 
-    drawFieldWIthVal(
-      dc,
-      RIGHT_POS_X,
-      CENTER_PADDING_TB + 8 + 54,
-      "desc",
-      totalDescent.format("%d")
-    );
+    if (valuesType.equals("primary")) {
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 12,
+        "asc",
+        totalAscent.format("%d")
+      );
+
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 8 + 54,
+        "desc",
+        totalDescent.format("%d")
+      );
+    } else {
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 12,
+        "energy",
+        energyExpenditure.format("%d")
+      );
+
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 8 + 54,
+        "cal",
+        calories.format("%d")
+      );
+    }
 
     // BOTTOM: Battery and GPS section
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
@@ -394,10 +427,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
       dc.drawBitmap(x - 8, y + 2, imgDescent);
     } else if (label.equals("cal")) {
       dc.drawBitmap(x - 8, y + 2, imgCal);
+    } else if (label.equals("energy")) {
+      dc.drawBitmap(x - 8, y + 2, imgEnergy);
     } else if (label.equals("cad")) {
       dc.drawBitmap(x - 8, y + 2, imgCadence);
     } else if (label.equals("hr")) {
       dc.drawBitmap(x - 8, y + 2, getHRImage(val.toNumber()));
+    } else {
+      dc.drawText(x, y - 2, Gfx.FONT_XTINY, label, Gfx.TEXT_JUSTIFY_CENTER);
     }
 
     //value

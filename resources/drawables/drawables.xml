@@ -9,5 +9,6 @@
     <bitmap id="CadenceIcon" filename="cadence_icon.png" dithering="none" />
     <bitmap id="AscentIcon" filename="ascent_icon.png" dithering="none" />
     <bitmap id="DescentIcon" filename="descent_icon.png" dithering="none" />
+    <bitmap id="EnergyIcon" filename="energy_icon.png" dithering="none" />
     <bitmap id="CaloriesIcon" filename="calories_icon_v3.png" dithering="none" />
 </drawables>
