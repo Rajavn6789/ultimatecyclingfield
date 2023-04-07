@@ -6,56 +6,47 @@ using Toybox.System as Sys;
 using Toybox.Weather as Weather;
 
 class UltimateCyclingFieldView extends Ui.DataField {
-  var elapsedDistance;
-
-  var timerTime = 0;
-
-  var currentSpeed;
-  var averageSpeed;
-  var maxSpeed;
-
-  var currentCadence;
-  var averageCadence;
-
-  var currentHeartRate;
-  var averageHeartRate;
   protected var hrZones;
-
-  var clockTime;
-  var batteryPercentage;
-  var batteryTimer;
-
-  var currentLocationAccuracy = 0;
-  var temperature;
-
-  var altitude;
-  var totalAscent;
-  var totalDescent;
-
-  var trainingEffect;
-  var calories;
-  var energyExpenditure;
-
-  var valuesType;
-
-  var prevBatteryFetchedMin;
-
   protected var imgHeart = WatchUi.loadResource(Rez.Drawables.HeartIcon);
   protected var imgHeartZ1 = WatchUi.loadResource(Rez.Drawables.HeartIconZ1);
   protected var imgHeartZ2 = WatchUi.loadResource(Rez.Drawables.HeartIconZ2);
   protected var imgHeartZ3 = WatchUi.loadResource(Rez.Drawables.HeartIconZ3);
   protected var imgHeartZ4 = WatchUi.loadResource(Rez.Drawables.HeartIconZ4);
   protected var imgHeartZ5 = WatchUi.loadResource(Rez.Drawables.HeartIconZ5);
-
   protected var imgCadence = WatchUi.loadResource(Rez.Drawables.CadenceIcon);
   protected var imgAscent = WatchUi.loadResource(Rez.Drawables.AscentIcon);
   protected var imgDescent = WatchUi.loadResource(Rez.Drawables.DescentIcon);
   protected var imgCal = WatchUi.loadResource(Rez.Drawables.CaloriesIcon);
   protected var imgEnergy = WatchUi.loadResource(Rez.Drawables.EnergyIcon);
 
+  var elapsedDistance;
+  var currentSpeed;
+  var averageSpeed;
+  var maxSpeed;
+  var currentCadence;
+  var averageCadence;
+  var currentHeartRate;
+  var averageHeartRate;
+  var timerTime;
+  var clockTime;
+  var batteryPercentage;
+  var batteryTimer;
+  var currentLocationAccuracy;
+  var temperature;
+  var altitude;
+  var totalAscent;
+  var totalDescent;
+  var trainingEffect;
+  var calories;
+  var energyExpenditure;
+  var valuesType;
+  var prevBatteryFetchedMin;
+
   function initialize() {
     DataField.initialize();
     batteryPercentage = Sys.getSystemStats().battery;
+    timerTime = 0;
+    currentLocationAccuracy = 0;
     prevBatteryFetchedMin = 0;
     hrZones = UserProfile.getHeartRateZones(UserProfile.getCurrentSport());
     valuesType = "primary";
@@ -109,7 +100,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed >= averageSpeed && currentSpeed <= 30) {
+    if (currentSpeed >= 25 && currentSpeed <= 30) {
       speedColor = darkGreen;
     } else if (currentSpeed > 30) {
       speedColor = Gfx.COLOR_DK_RED;
@@ -215,7 +206,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     drawFieldWIthVal(
       dc,
       LEFT_POS_X,
-      CENTER_PADDING_TB + 8 + 54,
+      CENTER_PADDING_TB + 12 + 54,
       "hr",
       currentHeartRate.format("%d")
     );
@@ -274,7 +265,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       drawFieldWIthVal(
         dc,
         RIGHT_POS_X,
-        CENTER_PADDING_TB + 8 + 54,
+        CENTER_PADDING_TB + 12 + 54,
         "desc",
         totalDescent.format("%d")
       );
@@ -290,7 +281,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       drawFieldWIthVal(
         dc,
         RIGHT_POS_X,
-        CENTER_PADDING_TB + 8 + 54,
+        CENTER_PADDING_TB + 12 + 54,
         "cal",
         calories.format("%d")
       );
