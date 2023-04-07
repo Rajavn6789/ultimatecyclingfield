@@ -223,7 +223,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 8,
         Gfx.FONT_XTINY,
-        "AVG: " + averageSpeed.format("%.2f") + " kph",
+        "avg: " + averageSpeed.format("%.2f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
@@ -231,7 +231,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 8,
         Gfx.FONT_XTINY,
-        "MAX: " + maxSpeed.format("%.2f") + " kph",
+        "max: " + maxSpeed.format("%.2f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     }
@@ -251,7 +251,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       halfWidth,
       halfHeight + 32,
       Gfx.FONT_XTINY,
-      "ELA: " + formatElapsedTime(timerTime),
+      "ela: " + formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
