@@ -74,8 +74,10 @@ class UltimateCyclingFieldView extends Ui.DataField {
     currentCadence = info.currentCadence != null ? info.currentCadence : 0.0;
     averageCadence = info.averageCadence != null ? info.averageCadence : 0.0;
 
-    currentHeartRate =
-      info.currentHeartRate != null ? info.currentHeartRate : 0.0;
+    if (info has :currentHeartRate) {
+      currentHeartRate =
+        info.currentHeartRate != null ? info.currentHeartRate : 0.0;
+    }
 
     altitude = info.altitude != null ? info.altitude : 0;
     currentLocationAccuracy =
@@ -99,30 +101,34 @@ class UltimateCyclingFieldView extends Ui.DataField {
     var CAD_HR_VALUE_HORI_OFFSET = 28;
     var DIS_TIME_VER_OFFSET = 28;
 
-    var RIGHT_POS_X = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET;
-    var LEFT_POS_X = 0 + CAD_HR_VALUE_HORI_OFFSET;
+    var RIGHT_POS_X = dc.getWidth() - CAD_HR_VALUE_HORI_OFFSET - 6;
+    var LEFT_POS_X = 6 + CAD_HR_VALUE_HORI_OFFSET;
 
     var backgroundColour = Gfx.COLOR_WHITE;
 
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed >= 25 && currentSpeed <= 35) {
+    if (currentSpeed >= averageSpeed && currentSpeed <= 30) {
       speedColor = darkGreen;
-    } else if (currentSpeed > 35) {
+    } else if (currentSpeed > 30) {
       speedColor = Gfx.COLOR_DK_RED;
     } else {
       speedColor = Gfx.COLOR_BLACK;
     }
 
-    // Alternate between primary and secondary fields
-    if (getSeconds(clockTime) <= 15) {
+    // Alternate between primary and secondary fields for every 10 seconds
+    if (getSeconds(clockTime) <= 10) {
       valuesType = "primary";
-    } else if (getSeconds(clockTime) > 15 && getSeconds(clockTime) <= 30) {
+    } else if (getSeconds(clockTime) > 10 && getSeconds(clockTime) <= 20) {
       valuesType = "secondary";
-    } else if (getSeconds(clockTime) > 30 && getSeconds(clockTime) <= 45) {
+    } else if (getSeconds(clockTime) > 20 && getSeconds(clockTime) <= 30) {
       valuesType = "primary";
-    } else if (getSeconds(clockTime) > 45 && getSeconds(clockTime) <= 59) {
+    } else if (getSeconds(clockTime) > 30 && getSeconds(clockTime) <= 40) {
+      valuesType = "secondary";
+    } else if (getSeconds(clockTime) > 40 && getSeconds(clockTime) <= 50) {
+      valuesType = "primary";
+    } else if (getSeconds(clockTime) > 50 && getSeconds(clockTime) <= 59) {
       valuesType = "secondary";
     } else {
       valuesType = "primary";
@@ -220,7 +226,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 4,
         Gfx.FONT_XTINY,
-        averageSpeed.format("%.2f") + " kph",
+        "AVG: " + averageSpeed.format("%.1f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
@@ -228,7 +234,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
         halfWidth,
         CENTER_PADDING_TB + 4,
         Gfx.FONT_XTINY,
-        "10k in " + getTenKmPace(averageSpeed) + " min",
+        "MAX: " + maxSpeed.format("%.1f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     }
@@ -248,7 +254,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
       halfWidth,
       halfHeight + 36,
       Gfx.FONT_XTINY,
-      formatElapsedTime(timerTime),
+      "ELA: " + formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
     );
 
