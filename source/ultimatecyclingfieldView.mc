@@ -264,22 +264,6 @@ class UltimateCyclingFieldView extends Ui.DataField {
         dc,
         RIGHT_POS_X,
         CENTER_PADDING_TB + 12,
-        "asc",
-        totalAscent.format("%d")
-      );
-
-      drawFieldWIthVal(
-        dc,
-        RIGHT_POS_X,
-        CENTER_PADDING_TB + 12 + 54,
-        "desc",
-        totalDescent.format("%d")
-      );
-    } else {
-      drawFieldWIthVal(
-        dc,
-        RIGHT_POS_X,
-        CENTER_PADDING_TB + 12,
         "energy",
         energyExpenditure.format("%d")
       );
@@ -290,6 +274,22 @@ class UltimateCyclingFieldView extends Ui.DataField {
         CENTER_PADDING_TB + 12 + 54,
         "cal",
         millify(calories)
+      );
+    } else {
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 12,
+        "asc",
+        totalAscent.format("%d")
+      );
+
+      drawFieldWIthVal(
+        dc,
+        RIGHT_POS_X,
+        CENTER_PADDING_TB + 12 + 54,
+        "desc",
+        totalDescent.format("%d")
       );
     }
 
