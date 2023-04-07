@@ -41,10 +41,14 @@ class UltimateCyclingFieldView extends Ui.DataField {
   var energyExpenditure;
   var valuesType;
   var prevBatteryFetchedMin;
+  var prevBatteryVal;
+  var batteryConsumption;
 
   function initialize() {
     DataField.initialize();
     batteryPercentage = Sys.getSystemStats().battery;
+    batteryConsumption = 0;
+    prevBatteryVal = batteryPercentage;
     timerTime = 0;
     currentLocationAccuracy = 0;
     prevBatteryFetchedMin = 0;
@@ -126,10 +130,12 @@ class UltimateCyclingFieldView extends Ui.DataField {
     }
 
     if (
-      getMinutes(clockTime) % 5 == 0 &&
+      getMinutes(clockTime) % 2 == 0 &&
       getMinutes(clockTime) != prevBatteryFetchedMin
     ) {
       batteryPercentage = Sys.getSystemStats().battery;
+      batteryConsumption = prevBatteryVal - batteryPercentage;
+      prevBatteryVal = batteryPercentage;
       prevBatteryFetchedMin = getMinutes(clockTime);
     }
 
@@ -215,17 +221,17 @@ class UltimateCyclingFieldView extends Ui.DataField {
     if (valuesType.equals("primary")) {
       dc.drawText(
         halfWidth,
-        CENTER_PADDING_TB + 4,
+        CENTER_PADDING_TB + 8,
         Gfx.FONT_XTINY,
-        "AVG: " + averageSpeed.format("%.1f") + " kph",
+        "AVG: " + averageSpeed.format("%.2f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     } else {
       dc.drawText(
         halfWidth,
-        CENTER_PADDING_TB + 4,
+        CENTER_PADDING_TB + 8,
         Gfx.FONT_XTINY,
-        "MAX: " + maxSpeed.format("%.1f") + " kph",
+        "MAX: " + maxSpeed.format("%.2f") + " kph",
         Gfx.TEXT_JUSTIFY_CENTER
       );
     }
@@ -243,7 +249,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
 
     dc.drawText(
       halfWidth,
-      halfHeight + 36,
+      halfHeight + 32,
       Gfx.FONT_XTINY,
       "ELA: " + formatElapsedTime(timerTime),
       Gfx.TEXT_JUSTIFY_CENTER
@@ -283,17 +289,27 @@ class UltimateCyclingFieldView extends Ui.DataField {
         RIGHT_POS_X,
         CENTER_PADDING_TB + 12 + 54,
         "cal",
-        calories.format("%d")
+        millify(calories)
       );
     }
 
     // BOTTOM: Battery and GPS section
+
+    var batteryText;
+    if (valuesType.equals("primary")) {
+      batteryText = batteryPercentage.format("%.1f") + " %";
+    } else {
+      batteryText =
+        batteryConsumption > 0
+          ? "-" + (batteryConsumption * 12).format("%.1f") + "% hr"
+          : "- 0% hr";
+    }
     dc.setColor(batteryColor, Gfx.COLOR_TRANSPARENT);
     dc.drawText(
       halfWidth - 32,
       dc.getHeight() - DIS_TIME_VER_OFFSET - 16,
       Gfx.FONT_XTINY,
-      batteryPercentage.format("%.1f") + " %",
+      batteryText,
       Gfx.TEXT_JUSTIFY_CENTER
     );
     dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
@@ -359,6 +375,16 @@ class UltimateCyclingFieldView extends Ui.DataField {
     } else {
       return "0.00";
     }
+  }
+
+  function millify(value) {
+    var formattedVal;
+    if (value >= 1000) {
+      formattedVal = (value / 1000).format("%d") + "k";
+    } else {
+      formattedVal = value;
+    }
+    return formattedVal;
   }
 
   function formatGPSAccuracy(value) {
