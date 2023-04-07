@@ -104,7 +104,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     clockTime = Sys.getClockTime();
 
     var speedColor;
-    if (currentSpeed >= 25 && currentSpeed <= 30) {
+    if (currentSpeed >= 20 && currentSpeed <= 30) {
       speedColor = darkGreen;
     } else if (currentSpeed > 30) {
       speedColor = Gfx.COLOR_DK_RED;
