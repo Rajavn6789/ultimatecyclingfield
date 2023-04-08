@@ -130,7 +130,7 @@ class UltimateCyclingFieldView extends Ui.DataField {
     }
 
     if (
-      getMinutes(clockTime) % 2 == 0 &&
+      getMinutes(clockTime) % 5 == 0 &&
       getMinutes(clockTime) != prevBatteryFetchedMin
     ) {
       batteryPercentage = Sys.getSystemStats().battery;
